@@ -1,96 +1,86 @@
-import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { isAuthenticated } from '@/lib/auth'
+import { NextResponse } from 'next/server';
+import { isAuthenticated } from '@/lib/auth';
+import prisma from '@/lib/prisma';
 
-// Clôturer manuellement une montante
-export async function POST(request, { params }) {
-  const authenticated = await isAuthenticated()
+// POST - Clôturer une montante
+export async function POST(req, { params }) {
+  const authenticated = await isAuthenticated();
   if (!authenticated) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
   }
 
   try {
+    const { id } = params;
+    const body = await req.json();
+    
     // Récupérer la montante avec ses paliers
     const montante = await prisma.montante.findUnique({
-      where: { id: params.id },
+      where: { id: parseInt(id) },
       include: {
         paliers: {
-          orderBy: { createdAt: 'asc' }
+          orderBy: { numero: 'asc' }
         }
       }
-    })
+    });
     
     if (!montante) {
       return NextResponse.json(
         { error: 'Montante non trouvée' },
         { status: 404 }
-      )
+      );
     }
     
-    // Vérifier que la montante est en cours
-    if (montante.status !== 'EN_COURS') {
+    if (montante.statut !== 'en_cours') {
       return NextResponse.json(
-        { error: 'Cette montante n\'est plus en cours' },
+        { error: 'La montante n\'est pas en cours' },
         { status: 400 }
-      )
+      );
     }
     
     // Calculer le gain final basé sur le dernier palier gagné
-    let gainFinal = -montante.miseInitiale // Par défaut, perte totale
-    
-    if (montante.paliers && montante.paliers.length > 0) {
-      // Trouver le dernier palier gagné
-      const dernierPalierGagne = [...montante.paliers]
-        .reverse()
-        .find(p => p.status === 'GAGNE')
+    let gainFinal = 0;
+    if (body.statut === 'GAGNEE') {
+      const dernierPalierGagne = montante.paliers
+        .filter(p => p.statut === 'GAGNE')
+        .pop();
       
       if (dernierPalierGagne) {
-        // Le gain final est le gain potentiel du dernier palier gagné moins la mise initiale
-        gainFinal = dernierPalierGagne.gainPotentiel - montante.miseInitiale
+        gainFinal = dernierPalierGagne.gainPotentiel - montante.miseInitiale;
       }
+    } else if (body.statut === 'PERDUE') {
+      gainFinal = -montante.miseInitiale;
     }
     
-    // Mettre à jour la montante dans une transaction
-    const [montanteMiseAJour, transaction] = await prisma.$transaction([
-      // Mettre à jour la montante
-      prisma.montante.update({
-        where: { id: params.id },
-        data: {
-          status: 'GAGNEE', // On considère comme gagnée même si l'objectif n'est pas atteint
-          dateFin: new Date(),
-          gainFinal: gainFinal
-        },
-        include: {
-          paliers: {
-            include: {
-              bookmaker: true
-            }
-          }
-        }
-      }),
-      
-      // Créer une transaction dans l'historique bankroll
-      prisma.transaction.create({
-        data: {
-          type: gainFinal >= 0 ? 'GAIN_MONTANTE' : 'PERTE_MONTANTE',
-          montant: gainFinal,
-          description: `Montante n°${montante.id} clôturée manuellement`,
-          reference: montante.id,
-          solde: 0 // Sera mis à jour par un trigger ou une fonction séparée
-        }
-      })
-    ])
+    // Mettre à jour la montante
+    const montanteMiseAJour = await prisma.montante.update({
+      where: { id: parseInt(id) },
+      data: {
+        statut: body.statut,
+        dateFin: new Date(),
+        gainFinal: gainFinal
+      }
+    });
     
-    return NextResponse.json({
-      success: true,
-      montante: montanteMiseAJour,
-      message: `Montante clôturée avec un gain de ${gainFinal.toFixed(2)} €`
-    })
+    // Créer une transaction dans l'historique
+    const description = body.statut === 'GAGNEE' 
+      ? `Montante n°${id} gagnée (objectif ${montante.objectif} atteint)`
+      : `Montante n°${id} perdue`;
+    
+    await prisma.transaction.create({
+      data: {
+        montant: gainFinal,
+        description: description,
+        type: body.statut === 'GAGNEE' ? 'MONTANTE_WIN' : 'MONTANTE_LOSS',
+        montanteId: parseInt(id)
+      }
+    });
+    
+    return NextResponse.json({ montante: montanteMiseAJour });
   } catch (error) {
-    console.error('Erreur lors de la clôture:', error)
+    console.error('Erreur lors de la clôture de la montante:', error);
     return NextResponse.json(
       { error: 'Erreur lors de la clôture de la montante' },
       { status: 500 }
-    )
+    );
   }
 }

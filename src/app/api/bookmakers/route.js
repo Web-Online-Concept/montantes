@@ -1,98 +1,102 @@
-import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { isAuthenticated } from '@/lib/auth'
+import { NextResponse } from 'next/server';
+import { isAuthenticated } from '@/lib/auth';
+import prisma from '@/lib/prisma';
 
-// Récupérer tous les bookmakers
+// GET - Récupérer tous les bookmakers
 export async function GET() {
   try {
     const bookmakers = await prisma.bookmaker.findMany({
-      orderBy: { ordre: 'asc' },
-      where: { actif: true }
-    })
+      orderBy: {
+        nom: 'asc'
+      }
+    });
     
-    // Si aucun bookmaker, on initialise avec les données par défaut
-    if (bookmakers.length === 0) {
-      const defaultBookmakers = [
-        { nom: 'Stake', code: 'STAKE', ordre: 1, actif: true },
-        { nom: 'PS3838', code: 'PS3838', ordre: 2, actif: true },
-        { nom: 'Winamax', code: 'WINA', ordre: 3, actif: true },
-        { nom: 'Betclic', code: 'BETC', ordre: 4, actif: true },
-        { nom: 'Paris Sportifs En Ligne', code: 'PSEL', ordre: 5, actif: true },
-        { nom: 'Unibet', code: 'UNI', ordre: 6, actif: true },
-      ]
-      
-      await prisma.bookmaker.createMany({ data: defaultBookmakers })
-      
-      return NextResponse.json(
-        await prisma.bookmaker.findMany({ orderBy: { ordre: 'asc' } })
-      )
-    }
-    
-    return NextResponse.json(bookmakers)
+    return NextResponse.json({ bookmakers });
   } catch (error) {
-    console.error('Erreur GET bookmakers:', error)
+    console.error('Erreur lors de la récupération des bookmakers:', error);
     return NextResponse.json(
       { error: 'Erreur lors de la récupération des bookmakers' },
       { status: 500 }
-    )
+    );
   }
 }
 
-// Créer un nouveau bookmaker (admin seulement)
+// POST - Créer un nouveau bookmaker
 export async function POST(request) {
-  const authenticated = await isAuthenticated()
+  const authenticated = await isAuthenticated();
   if (!authenticated) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
   }
 
   try {
-    const data = await request.json()
+    const data = await request.json();
     
-    const newBookmaker = await prisma.bookmaker.create({
+    const nouveauBookmaker = await prisma.bookmaker.create({
       data: {
         nom: data.nom,
-        code: data.code,
-        ordre: data.ordre || 0,
-        actif: data.actif !== false
+        couleur: data.couleur || '#3B82F6'
       }
-    })
+    });
     
-    return NextResponse.json(newBookmaker)
+    return NextResponse.json({ bookmaker: nouveauBookmaker });
   } catch (error) {
-    console.error('Erreur POST bookmaker:', error)
+    console.error('Erreur lors de la création du bookmaker:', error);
     return NextResponse.json(
       { error: 'Erreur lors de la création du bookmaker' },
       { status: 500 }
-    )
+    );
   }
 }
 
-// Mettre à jour un bookmaker (admin seulement)
+// PUT - Mettre à jour un bookmaker
 export async function PUT(request) {
-  const authenticated = await isAuthenticated()
+  const authenticated = await isAuthenticated();
   if (!authenticated) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
   }
 
   try {
-    const data = await request.json()
+    const data = await request.json();
     
-    const updatedBookmaker = await prisma.bookmaker.update({
+    const bookmakerMisAJour = await prisma.bookmaker.update({
       where: { id: data.id },
       data: {
         nom: data.nom,
-        code: data.code,
-        ordre: data.ordre,
-        actif: data.actif
+        couleur: data.couleur
       }
-    })
+    });
     
-    return NextResponse.json(updatedBookmaker)
+    return NextResponse.json({ bookmaker: bookmakerMisAJour });
   } catch (error) {
-    console.error('Erreur PUT bookmaker:', error)
+    console.error('Erreur lors de la mise à jour du bookmaker:', error);
     return NextResponse.json(
       { error: 'Erreur lors de la mise à jour du bookmaker' },
       { status: 500 }
-    )
+    );
+  }
+}
+
+// DELETE - Supprimer un bookmaker
+export async function DELETE(request) {
+  const authenticated = await isAuthenticated();
+  if (!authenticated) {
+    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 });
+  }
+
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = parseInt(searchParams.get('id'));
+    
+    await prisma.bookmaker.delete({
+      where: { id }
+    });
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du bookmaker:', error);
+    return NextResponse.json(
+      { error: 'Erreur lors de la suppression du bookmaker' },
+      { status: 500 }
+    );
   }
 }
