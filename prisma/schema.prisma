@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Bookmaker {
+  id        String   @id @default(cuid())
+  nom       String   @unique
+  code      String   @unique
+  url       String?
+  bonus     String?
+  actif     Boolean  @default(true)
+  ordre     Int      @default(0)
+  
+  paliers   Palier[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Montante {
+  id            String   @id @default(cuid())
+  miseInitiale  Float
+  objectif      String   // "X2", "X3", "X5", "X10"
+  status        String   @default("EN_COURS") // "EN_COURS", "GAGNEE", "PERDUE"
+  miseActuelle  Float    @default(0)
+  gainFinal     Float    @default(0)
+  dateDebut     DateTime @default(now())
+  dateFin       DateTime?
+  
+  paliers       Palier[]
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Palier {
+  id             String    @id @default(cuid())
+  montanteId     String
+  montante       Montante  @relation(fields: [montanteId], references: [id], onDelete: Cascade)
+  
+  typePari       String    // "Simple" ou "Combiné"
+  sports         String[]
+  matchs         String[]
+  typeParis      String[]  // Types de paris pour chaque match
+  pronostics     String[]  // Pronostics pour chaque match
+  cotes          Float[]
+  dateParis      DateTime[]
+  coteTotale     Float
+  
+  bookmakerId    String?
+  bookmaker      Bookmaker? @relation(fields: [bookmakerId], references: [id])
+  
+  mise           Float
+  gainPotentiel  Float
+  status         String    @default("EN_ATTENTE") // "EN_ATTENTE", "GAGNE", "PERDU"
+  
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Transaction {
+  id          String   @id @default(cuid())
+  type        String   // "DEPOT", "RETRAIT", "GAIN_MONTANTE", "PERTE_MONTANTE"
+  montant     Float
+  solde       Float    // Solde après la transaction
+  description String
+  reference   String?  // Référence de la montante si applicable
+  
+  createdAt   DateTime @default(now())
+}

@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Bloque l'accès à l'administration
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://montantes.pro/sitemap.xml
