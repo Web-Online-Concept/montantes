@@ -22,14 +22,10 @@ export default function Home() {
       const response = await fetch('/api/montantes')
       if (response.ok) {
         const data = await response.json()
+        console.log('API montantes response:', data) // Debug
         // FIX: L'API retourne { montantes: [...] }, pas directement le tableau
-        setMontantes(data.montantes || [])
-      }
-    } catch (error) {
-      console.error('Erreur chargement montantes:', error)
-      setMontantes([])
-    }
-  }
+        const montantesArray = Array.isArray(data) ? data : (data.montantes || [])
+        setMontantes(montantesArray
 
   const fetchBankroll = async () => {
     try {
@@ -68,9 +64,10 @@ export default function Home() {
   }
 
   // Calculer les stats
-  const montantesEnCours = montantes.filter(m => m.status === 'EN_COURS').length
-  const montantesGagnees = montantes.filter(m => m.status === 'GAGNEE').length
-  const montantesPerdues = montantes.filter(m => m.status === 'PERDUE').length
+  const montantesArray = Array.isArray(montantes) ? montantes : []
+  const montantesEnCours = montantesArray.filter(m => m.status === 'EN_COURS').length
+  const montantesGagnees = montantesArray.filter(m => m.status === 'GAGNEE').length
+  const montantesPerdues = montantesArray.filter(m => m.status === 'PERDUE').length
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -122,7 +119,7 @@ export default function Home() {
           </div>
         ) : (
           <div className="space-y-6">
-            {montantes
+            {montantesArray
               .filter(m => m.status === 'EN_COURS')
               .map(montante => (
                 <MontanteCard key={montante.id} montante={montante} />
@@ -133,7 +130,7 @@ export default function Home() {
         {/* Historique des Montantes */}
         <div className="flex items-center justify-between mb-6 mt-12">
           <h2 className="text-2xl font-bold">Historique des Montantes</h2>
-          {montantes.filter(m => m.status !== 'EN_COURS').length > 5 && (
+          {montantesArray.filter(m => m.status !== 'EN_COURS').length > 5 && (
             <a 
               href="/historique" 
               className="text-blue-600 hover:text-blue-800 font-medium"
@@ -143,7 +140,7 @@ export default function Home() {
           )}
         </div>
         <div className="space-y-4">
-          {montantes
+          {montantesArray
             .filter(m => m.status !== 'EN_COURS')
             .slice(0, 5) // Limite à 5 montantes
             .map(montante => (
