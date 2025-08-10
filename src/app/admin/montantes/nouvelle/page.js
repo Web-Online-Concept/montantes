@@ -1,38 +1,16 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 export default function NouvelleMontantePage() {
   const router = useRouter()
-  const [bookmakers, setBookmakers] = useState([])
   const [formData, setFormData] = useState({
-    bookmakerId: '',
     miseInitiale: '',
-    objectif: 'X2',
-    premierPalier: {
-      cote: '',
-      description: ''
-    }
+    objectif: 'X2'
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    fetchBookmakers()
-  }, [])
-
-  const fetchBookmakers = async () => {
-    try {
-      const response = await fetch('/api/bookmakers')
-      if (response.ok) {
-        const data = await response.json()
-        setBookmakers(data.bookmakers || [])
-      }
-    } catch (error) {
-      console.error('Erreur chargement bookmakers:', error)
-    }
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -44,12 +22,12 @@ export default function NouvelleMontantePage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          ...formData,
-          bookmakerId: parseInt(formData.bookmakerId),
           miseInitiale: parseFloat(formData.miseInitiale),
+          objectif: formData.objectif,
+          bookmakerId: 1, // Premier bookmaker par défaut
           premierPalier: {
-            cote: parseFloat(formData.premierPalier.cote),
-            description: formData.premierPalier.description
+            cote: 1.01,
+            description: 'À définir'
           }
         })
       })
@@ -88,29 +66,6 @@ export default function NouvelleMontantePage() {
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-lg shadow p-6">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Bookmaker */}
-              <div>
-                <label htmlFor="bookmakerId" className="block text-sm font-medium text-gray-700 mb-2">
-                  Bookmaker
-                </label>
-                <select
-                  id="bookmakerId"
-                  name="bookmakerId"
-                  required
-                  value={formData.bookmakerId}
-                  onChange={(e) => setFormData({ ...formData, bookmakerId: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  disabled={loading}
-                >
-                  <option value="">Sélectionner un bookmaker</option>
-                  {bookmakers.map((bookmaker) => (
-                    <option key={bookmaker.id} value={bookmaker.id}>
-                      {bookmaker.nom}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
               {/* Mise initiale */}
               <div>
                 <label htmlFor="miseInitiale" className="block text-sm font-medium text-gray-700 mb-2">
@@ -152,66 +107,15 @@ export default function NouvelleMontantePage() {
                 </select>
               </div>
 
-              {/* Premier palier */}
-              <div className="border-t pt-4">
-                <h3 className="font-semibold mb-4">Premier palier</h3>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label htmlFor="cote" className="block text-sm font-medium text-gray-700 mb-2">
-                      Cote du premier pari
-                    </label>
-                    <input
-                      type="number"
-                      id="cote"
-                      name="cote"
-                      step="0.01"
-                      min="1.01"
-                      required
-                      value={formData.premierPalier.cote}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        premierPalier: { ...formData.premierPalier, cote: e.target.value }
-                      })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="1.50"
-                      disabled={loading}
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-                      Description du pari
-                    </label>
-                    <input
-                      type="text"
-                      id="description"
-                      name="description"
-                      value={formData.premierPalier.description}
-                      onChange={(e) => setFormData({
-                        ...formData,
-                        premierPalier: { ...formData.premierPalier, description: e.target.value }
-                      })}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Ex: PSG vs Lyon - Plus de 2.5 buts"
-                      disabled={loading}
-                    />
-                  </div>
-                </div>
-              </div>
-
               {/* Résumé */}
-              {formData.miseInitiale && formData.premierPalier.cote && (
+              {formData.miseInitiale && (
                 <div className="bg-blue-50 p-4 rounded-lg">
                   <h3 className="font-semibold text-blue-900 mb-2">Résumé</h3>
                   <p className="text-sm text-blue-700">
                     Mise initiale : {parseFloat(formData.miseInitiale).toFixed(2)} €
                   </p>
                   <p className="text-sm text-blue-700">
-                    Premier gain potentiel : {(parseFloat(formData.miseInitiale) * parseFloat(formData.premierPalier.cote)).toFixed(2)} €
-                  </p>
-                  <p className="text-sm text-blue-700">
-                    Objectif final : {formData.objectif} = {
+                    Objectif : {formData.objectif} = {
                       (parseFloat(formData.miseInitiale) * parseInt(formData.objectif.slice(1))).toFixed(2)
                     } €
                   </p>
@@ -242,6 +146,17 @@ export default function NouvelleMontantePage() {
                 </a>
               </div>
             </form>
+          </div>
+
+          {/* Instructions */}
+          <div className="mt-6 bg-yellow-50 p-4 rounded-lg">
+            <h3 className="font-semibold text-yellow-900 mb-2">Comment ça marche ?</h3>
+            <ul className="text-sm text-yellow-700 space-y-1">
+              <li>• La mise initiale sera déduite de votre bankroll</li>
+              <li>• À chaque palier gagné, vous réinvestissez la totalité des gains</li>
+              <li>• La montante est validée quand l'objectif est atteint</li>
+              <li>• Si vous perdez un palier, la montante est perdue</li>
+            </ul>
           </div>
         </div>
       </main>
