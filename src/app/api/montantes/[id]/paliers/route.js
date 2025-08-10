@@ -1,89 +1,79 @@
-import { NextResponse } from 'next/server'
-import { isAuthenticated } from '@/lib/auth'
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
 
-// Utilisation de global pour partager les données
-global.montantes = global.montantes || []
-global.palierIdCounter = global.palierIdCounter || 1
-
-// Helper pour récupérer le nom du bookmaker
-function getBookmakerName(bookmakerId) {
-  const bookmakers = [
-    { id: '1', nom: 'Stake' },
-    { id: '2', nom: 'PS3838' },
-    { id: '3', nom: 'Winamax' },
-    { id: '4', nom: 'Betclic' },
-    { id: '5', nom: 'Paris Sportifs En Ligne' },
-    { id: '6', nom: 'Unibet' }
-  ]
-  const bookmaker = bookmakers.find(b => b.id === bookmakerId)
-  return bookmaker ? bookmaker.nom : 'Inconnu'
+export async function GET(req, { params }) {
+  try {
+    const { id } = params;
+    
+    const paliers = await prisma.palier.findMany({
+      where: {
+        montanteId: parseInt(id)
+      },
+      orderBy: {
+        numero: 'asc'
+      }
+    });
+    
+    return NextResponse.json({ paliers });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des paliers:', error);
+    return NextResponse.json(
+      { error: 'Erreur lors de la récupération des paliers' },
+      { status: 500 }
+    );
+  }
 }
 
-// Créer un nouveau palier pour une montante
-export async function POST(request, { params }) {
-  const authenticated = await isAuthenticated()
-  if (!authenticated) {
-    return NextResponse.json({ error: 'Non autorisé' }, { status: 401 })
-  }
-
+export async function POST(req, { params }) {
   try {
-    const montanteIndex = global.montantes.findIndex(m => m.id === params.id)
+    const { id } = params;
+    const body = await req.json();
     
-    if (montanteIndex === -1) {
+    // Récupérer la montante
+    const montante = await prisma.montante.findUnique({
+      where: { id: parseInt(id) },
+      include: { paliers: true }
+    });
+    
+    if (!montante) {
       return NextResponse.json(
         { error: 'Montante non trouvée' },
         { status: 404 }
-      )
+      );
     }
     
-    const montante = global.montantes[montanteIndex]
-    
-    // Vérifier que la montante est en cours
-    if (montante.status !== 'EN_COURS') {
+    if (montante.statut !== 'en_cours') {
       return NextResponse.json(
-        { error: 'Cette montante n\'est plus en cours' },
+        { error: 'La montante doit être en cours pour ajouter des paliers' },
         { status: 400 }
-      )
+      );
     }
-    
-    const data = await request.json()
     
     // Créer le nouveau palier
-    const nouveauPalier = {
-      id: global.palierIdCounter.toString(),
-      montanteId: params.id,
-      typePari: data.typePari,
-      sports: data.sports,
-      matchs: data.matchs,
-      cotes: data.cotes,
-      coteTotale: data.coteTotale,
-      bookmakerId: data.bookmakerId,
-      bookmaker: { 
-        id: data.bookmakerId,
-        nom: getBookmakerName(data.bookmakerId) // Fonction helper pour récupérer le nom
-      },
-      mise: data.mise,
-      gainPotentiel: data.gainPotentiel,
-      status: 'EN_ATTENTE',
-      resultat: null,
-      dateCreation: new Date().toISOString(),
-      dateResultat: null
-    }
+    const nouveauPalier = await prisma.palier.create({
+      data: {
+        montanteId: parseInt(id),
+        numero: montante.paliers.length + 1,
+        mise: parseFloat(body.mise),
+        cote: parseFloat(body.cote),
+        description: body.description || '',
+        statut: 'en_attente',
+        gainPotentiel: parseFloat(body.mise) * parseFloat(body.cote)
+      }
+    });
     
-    // Ajouter le palier à la montante
-    if (!montante.paliers) {
-      montante.paliers = []
-    }
-    montante.paliers.push(nouveauPalier)
+    // Mettre à jour le palier actuel de la montante
+    await prisma.montante.update({
+      where: { id: parseInt(id) },
+      data: { palierActuel: nouveauPalier.numero }
+    });
     
-    global.palierIdCounter++
-    
-    return NextResponse.json(nouveauPalier)
+    return NextResponse.json({ palier: nouveauPalier });
   } catch (error) {
-    console.error('Erreur POST palier:', error)
+    console.error('Erreur lors de l\'ajout du palier:', error);
     return NextResponse.json(
-      { error: 'Erreur lors de la création du palier' },
+      { error: 'Erreur lors de l\'ajout du palier' },
       { status: 500 }
-    )
+    );
   }
 }

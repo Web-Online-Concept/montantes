@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 import { isAuthenticated } from '@/lib/auth'
-
-// Utilisation de global pour partager les données
-global.montantes = global.montantes || []
 
 // Clôturer manuellement une montante
 export async function POST(request, { params }) {
@@ -12,16 +10,22 @@ export async function POST(request, { params }) {
   }
 
   try {
-    const montanteIndex = global.montantes.findIndex(m => m.id === params.id)
+    // Récupérer la montante avec ses paliers
+    const montante = await prisma.montante.findUnique({
+      where: { id: params.id },
+      include: {
+        paliers: {
+          orderBy: { createdAt: 'asc' }
+        }
+      }
+    })
     
-    if (montanteIndex === -1) {
+    if (!montante) {
       return NextResponse.json(
         { error: 'Montante non trouvée' },
         { status: 404 }
       )
     }
-    
-    const montante = global.montantes[montanteIndex]
     
     // Vérifier que la montante est en cours
     if (montante.status !== 'EN_COURS') {
@@ -46,31 +50,40 @@ export async function POST(request, { params }) {
       }
     }
     
-    // Mettre à jour la montante
-    global.montantes[montanteIndex] = {
-      ...montante,
-      status: 'GAGNEE', // On considère comme gagnée même si l'objectif n'est pas atteint
-      dateFin: new Date().toISOString(),
-      gainFinal: gainFinal
-    }
-    
-    // Ajouter à la bankroll
-    const entry = {
-      id: (global.bankrollIdCounter || 1).toString(),
-      montant: gainFinal,
-      description: `Montante n°${montante.id} clôturée manuellement`,
-      type: gainFinal >= 0 ? 'MONTANTE_WIN' : 'MONTANTE_LOSS',
-      montanteId: montante.id,
-      date: new Date().toISOString(),
-      createdAt: new Date().toISOString()
-    }
-    global.bankrollHistory = global.bankrollHistory || []
-    global.bankrollHistory.push(entry)
-    global.bankrollIdCounter = (global.bankrollIdCounter || 1) + 1
+    // Mettre à jour la montante dans une transaction
+    const [montanteMiseAJour, transaction] = await prisma.$transaction([
+      // Mettre à jour la montante
+      prisma.montante.update({
+        where: { id: params.id },
+        data: {
+          status: 'GAGNEE', // On considère comme gagnée même si l'objectif n'est pas atteint
+          dateFin: new Date(),
+          gainFinal: gainFinal
+        },
+        include: {
+          paliers: {
+            include: {
+              bookmaker: true
+            }
+          }
+        }
+      }),
+      
+      // Créer une transaction dans l'historique bankroll
+      prisma.transaction.create({
+        data: {
+          type: gainFinal >= 0 ? 'GAIN_MONTANTE' : 'PERTE_MONTANTE',
+          montant: gainFinal,
+          description: `Montante n°${montante.id} clôturée manuellement`,
+          reference: montante.id,
+          solde: 0 // Sera mis à jour par un trigger ou une fonction séparée
+        }
+      })
+    ])
     
     return NextResponse.json({
       success: true,
-      montante: global.montantes[montanteIndex],
+      montante: montanteMiseAJour,
       message: `Montante clôturée avec un gain de ${gainFinal.toFixed(2)} €`
     })
   } catch (error) {

@@ -1,14 +1,21 @@
 import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 import { isAuthenticated } from '@/lib/auth'
-
-// Import des données partagées avec l'API principale
-// Pour l'instant on utilise une variable globale (à remplacer par la DB)
-global.montantes = global.montantes || []
 
 // Récupérer une montante spécifique
 export async function GET(request, { params }) {
   try {
-    const montante = global.montantes.find(m => m.id === params.id)
+    const montante = await prisma.montante.findUnique({
+      where: { id: params.id },
+      include: {
+        paliers: {
+          include: {
+            bookmaker: true
+          },
+          orderBy: { createdAt: 'asc' }
+        }
+      }
+    })
     
     if (!montante) {
       return NextResponse.json(
@@ -35,17 +42,22 @@ export async function DELETE(request, { params }) {
   }
 
   try {
-    const index = global.montantes.findIndex(m => m.id === params.id)
+    // Vérifier que la montante existe
+    const montante = await prisma.montante.findUnique({
+      where: { id: params.id }
+    })
     
-    if (index === -1) {
+    if (!montante) {
       return NextResponse.json(
         { error: 'Montante non trouvée' },
         { status: 404 }
       )
     }
     
-    // Supprimer la montante
-    global.montantes.splice(index, 1)
+    // Supprimer la montante (les paliers seront supprimés automatiquement grâce à onDelete: Cascade)
+    await prisma.montante.delete({
+      where: { id: params.id }
+    })
     
     return NextResponse.json({ success: true })
   } catch (error) {
