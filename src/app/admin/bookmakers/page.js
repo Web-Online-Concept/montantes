@@ -12,9 +12,7 @@ export default function BookmakersPage() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [newBookmaker, setNewBookmaker] = useState({
     nom: '',
-    code: '',
-    ordre: 0,
-    actif: true
+    couleur: '#3B82F6'
   })
   const router = useRouter()
 
@@ -27,9 +25,11 @@ export default function BookmakersPage() {
       const res = await fetch('/api/bookmakers')
       if (!res.ok) throw new Error('Erreur')
       const data = await res.json()
-      setBookmakers(data)
+      // FIX: L'API retourne { bookmakers: [...] }
+      setBookmakers(data.bookmakers || [])
     } catch (error) {
       console.error('Erreur:', error)
+      setBookmakers([])
     } finally {
       setLoading(false)
     }
@@ -76,10 +76,27 @@ export default function BookmakersPage() {
       
       await fetchBookmakers()
       setShowAddForm(false)
-      setNewBookmaker({ nom: '', code: '', ordre: 0, actif: true })
+      setNewBookmaker({ nom: '', couleur: '#3B82F6' })
     } catch (error) {
       console.error('Erreur:', error)
       alert('Erreur lors de l\'ajout')
+    }
+  }
+
+  const handleDelete = async (id) => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce bookmaker ?')) return
+
+    try {
+      const res = await fetch(`/api/bookmakers?id=${id}`, {
+        method: 'DELETE'
+      })
+      
+      if (!res.ok) throw new Error('Erreur')
+      
+      await fetchBookmakers()
+    } catch (error) {
+      console.error('Erreur:', error)
+      alert('Erreur lors de la suppression')
     }
   }
 
@@ -121,30 +138,24 @@ export default function BookmakersPage() {
 
           {showAddForm && (
             <form onSubmit={handleAddBookmaker} className="p-6 bg-gray-50 border-b">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <input
                   type="text"
-                  placeholder="Nom"
+                  placeholder="Nom du bookmaker"
                   value={newBookmaker.nom}
                   onChange={(e) => setNewBookmaker({...newBookmaker, nom: e.target.value})}
                   className="px-3 py-2 border rounded"
                   required
                 />
-                <input
-                  type="text"
-                  placeholder="Code"
-                  value={newBookmaker.code}
-                  onChange={(e) => setNewBookmaker({...newBookmaker, code: e.target.value})}
-                  className="px-3 py-2 border rounded"
-                  required
-                />
-                <input
-                  type="number"
-                  placeholder="Ordre"
-                  value={newBookmaker.ordre}
-                  onChange={(e) => setNewBookmaker({...newBookmaker, ordre: parseInt(e.target.value)})}
-                  className="px-3 py-2 border rounded"
-                />
+                <div className="flex items-center gap-2">
+                  <label className="text-sm">Couleur:</label>
+                  <input
+                    type="color"
+                    value={newBookmaker.couleur}
+                    onChange={(e) => setNewBookmaker({...newBookmaker, couleur: e.target.value})}
+                    className="h-10 w-20"
+                  />
+                </div>
                 <div className="flex gap-2">
                   <button
                     type="submit"
@@ -172,13 +183,10 @@ export default function BookmakersPage() {
                     Nom
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Code
+                    Couleur
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Ordre
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Statut
+                    Date d'ajout
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
@@ -197,54 +205,29 @@ export default function BookmakersPage() {
                           className="px-2 py-1 border rounded"
                         />
                       ) : (
-                        bookmaker.nom
+                        <span className="font-medium">{bookmaker.nom}</span>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {editingId === bookmaker.id ? (
                         <input
-                          type="text"
-                          value={editForm.code}
-                          onChange={(e) => setEditForm({...editForm, code: e.target.value})}
-                          className="px-2 py-1 border rounded"
+                          type="color"
+                          value={editForm.couleur}
+                          onChange={(e) => setEditForm({...editForm, couleur: e.target.value})}
+                          className="h-8 w-20"
                         />
                       ) : (
-                        <span className="px-2 py-1 bg-gray-100 rounded text-sm">
-                          {bookmaker.code}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <div 
+                            className="w-6 h-6 rounded"
+                            style={{ backgroundColor: bookmaker.couleur }}
+                          />
+                          <span className="text-sm text-gray-600">{bookmaker.couleur}</span>
+                        </div>
                       )}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {editingId === bookmaker.id ? (
-                        <input
-                          type="number"
-                          value={editForm.ordre}
-                          onChange={(e) => setEditForm({...editForm, ordre: parseInt(e.target.value)})}
-                          className="px-2 py-1 border rounded w-20"
-                        />
-                      ) : (
-                        bookmaker.ordre
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {editingId === bookmaker.id ? (
-                        <select
-                          value={editForm.actif}
-                          onChange={(e) => setEditForm({...editForm, actif: e.target.value === 'true'})}
-                          className="px-2 py-1 border rounded"
-                        >
-                          <option value="true">Actif</option>
-                          <option value="false">Inactif</option>
-                        </select>
-                      ) : (
-                        <span className={`px-2 py-1 rounded text-xs ${
-                          bookmaker.actif 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
-                          {bookmaker.actif ? 'Actif' : 'Inactif'}
-                        </span>
-                      )}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(bookmaker.createdAt).toLocaleDateString('fr-FR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {editingId === bookmaker.id ? (
@@ -263,12 +246,22 @@ export default function BookmakersPage() {
                           </button>
                         </div>
                       ) : (
-                        <button
-                          onClick={() => handleEdit(bookmaker)}
-                          className="text-blue-600 hover:text-blue-800"
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </button>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEdit(bookmaker)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(bookmaker.id)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                          </button>
+                        </div>
                       )}
                     </td>
                   </tr>

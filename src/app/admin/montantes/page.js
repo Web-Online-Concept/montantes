@@ -15,7 +15,8 @@ export default function MontantesPage() {
       const response = await fetch('/api/montantes')
       if (!response.ok) throw new Error('Erreur de chargement')
       const data = await response.json()
-      setMontantes(data)
+      // FIX: L'API retourne { montantes: [...] }
+      setMontantes(data.montantes || [])
     } catch (error) {
       setError('Erreur lors du chargement des montantes')
       console.error(error)
@@ -48,7 +49,7 @@ export default function MontantesPage() {
   // Calculer le statut d'affichage
   const getStatusBadge = (status) => {
     switch (status) {
-      case 'EN_COURS':
+      case 'en_cours':
         return <span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">En cours</span>
       case 'GAGNEE':
         return <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Gagnée</span>
@@ -159,10 +160,10 @@ export default function MontantesPage() {
                       {getGainPotentiel(montante).toFixed(2)} €
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {getStatusBadge(montante.status)}
+                      {getStatusBadge(montante.statut)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {new Date(montante.dateDebut).toLocaleDateString('fr-FR')}
+                      {new Date(montante.createdAt).toLocaleDateString('fr-FR')}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
@@ -193,19 +194,19 @@ export default function MontantesPage() {
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-2">En cours</h3>
               <p className="text-3xl font-bold text-blue-600">
-                {montantes.filter(m => m.status === 'EN_COURS').length}
+                {montantes.filter(m => m.statut === 'en_cours').length}
               </p>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-2">Gagnées</h3>
               <p className="text-3xl font-bold text-green-600">
-                {montantes.filter(m => m.status === 'GAGNEE').length}
+                {montantes.filter(m => m.statut === 'GAGNEE').length}
               </p>
             </div>
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-semibold mb-2">Perdues</h3>
               <p className="text-3xl font-bold text-red-600">
-                {montantes.filter(m => m.status === 'PERDUE').length}
+                {montantes.filter(m => m.statut === 'PERDUE').length}
               </p>
             </div>
           </div>
