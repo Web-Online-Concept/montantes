@@ -35,7 +35,7 @@ export default function MontanteDetailPage() {
       const response = await fetch(`/api/montantes/${params.id}`)
       if (!response.ok) throw new Error('Montante non trouvée')
       const data = await response.json()
-      setMontante(data)
+      setMontante(data.montante) // FIX: L'API retourne { montante: {...} }
     } catch (error) {
       setError('Erreur lors du chargement de la montante')
       console.error(error)
@@ -49,7 +49,7 @@ export default function MontanteDetailPage() {
       const response = await fetch('/api/bookmakers')
       if (!response.ok) throw new Error('Erreur de chargement')
       const data = await response.json()
-      setBookmakers(data)
+      setBookmakers(data.bookmakers || []) // FIX: L'API retourne { bookmakers: [...] }
     } catch (error) {
       console.error('Erreur lors du chargement des bookmakers:', error)
     }
@@ -103,7 +103,7 @@ export default function MontanteDetailPage() {
     // Sinon, c'est le gain potentiel du dernier palier gagné
     const dernierPalierGagne = [...montante.paliers]
       .reverse()
-      .find(p => p.status === 'GAGNE')
+      .find(p => p.statut === 'GAGNE')
     
     return dernierPalierGagne ? dernierPalierGagne.gainPotentiel : montante.miseInitiale
   }
@@ -139,17 +139,9 @@ export default function MontanteDetailPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          typePari: palierForm.typePari,
-          sports,
-          matchs,
-          typeParis,
-          pronostics,
-          dateParis,
-          cotes,
-          coteTotale,
-          bookmakerId: palierForm.bookmakerId,
           mise,
-          gainPotentiel: mise * coteTotale
+          cote: coteTotale,
+          description: `${palierForm.typePari} - ${matchs.join(', ')}`
         })
       })
       
@@ -197,7 +189,7 @@ export default function MontanteDetailPage() {
 
   // Clôturer manuellement la montante
   const closeMontante = async () => {
-    const dernierPalierGagne = montante.paliers?.slice().reverse().find(p => p.status === 'GAGNE')
+    const dernierPalierGagne = montante.paliers?.slice().reverse().find(p => p.statut === 'GAGNE')
     const gainActuel = dernierPalierGagne ? dernierPalierGagne.gainPotentiel : montante.miseInitiale
     const gainNet = dernierPalierGagne ? (gainActuel - montante.miseInitiale) : -montante.miseInitiale
     
@@ -209,13 +201,16 @@ export default function MontanteDetailPage() {
     
     try {
       const response = await fetch(`/api/montantes/${params.id}/close`, {
-        method: 'POST'
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          statut: dernierPalierGagne ? 'GAGNEE' : 'PERDUE'
+        })
       })
       
       if (!response.ok) throw new Error('Erreur lors de la clôture')
       
-      const result = await response.json()
-      alert(result.message)
+      alert('Montante clôturée avec succès')
       
       // Recharger la montante
       fetchMontante()
@@ -298,9 +293,9 @@ export default function MontanteDetailPage() {
                 <div>
                   <p className="text-sm text-gray-500">Status</p>
                   <p className="font-semibold">
-                    {montante.status === 'EN_COURS' && <span className="text-blue-600">En cours</span>}
-                    {montante.status === 'GAGNEE' && <span className="text-green-600">Gagnée</span>}
-                    {montante.status === 'PERDUE' && <span className="text-red-600">Perdue</span>}
+                    {montante.statut === 'en_cours' && <span className="text-blue-600">En cours</span>}
+                    {montante.statut === 'GAGNEE' && <span className="text-green-600">Gagnée</span>}
+                    {montante.statut === 'PERDUE' && <span className="text-red-600">Perdue</span>}
                   </p>
                 </div>
                 <div>
@@ -313,10 +308,10 @@ export default function MontanteDetailPage() {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Date de début</p>
-                  <p className="font-semibold">{new Date(montante.dateDebut).toLocaleDateString('fr-FR')}</p>
+                  <p className="font-semibold">{new Date(montante.createdAt).toLocaleDateString('fr-FR')}</p>
                 </div>
               </div>
-              {montante.status !== 'EN_COURS' && montante.gainFinal !== null && (
+              {montante.statut !== 'en_cours' && montante.gainFinal !== null && (
                 <div className="mt-4 p-4 bg-gray-50 rounded-lg">
                   <p className="text-sm text-gray-600">
                     <strong>Résultat final:</strong> {montante.gainFinal >= 0 ? '+' : ''}{montante.gainFinal.toFixed(2)} €
@@ -329,7 +324,7 @@ export default function MontanteDetailPage() {
                 </div>
               )}
             </div>
-            {montante.status === 'EN_COURS' && (
+            {montante.statut === 'en_cours' && (
               <div className="ml-4">
                 <button
                   onClick={closeMontante}
@@ -346,7 +341,7 @@ export default function MontanteDetailPage() {
         <div className="bg-white rounded-lg shadow p-6">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Paliers</h2>
-            {montante.status === 'EN_COURS' && (
+            {montante.statut === 'en_cours' && (
               <button
                 onClick={() => setShowPalierForm(!showPalierForm)}
                 className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
@@ -504,7 +499,7 @@ export default function MontanteDetailPage() {
               </div>
 
               {/* Bouton ajouter un match */}
-              {(palierForm.typePari === 'Combiné' || palierForm.sports.length === 0) && palierForm.sports.length < 2 && (
+              {(palierForm.typePari === 'Combiné' || palierForm.sports.length === 0) && (
                 <button
                   type="button"
                   onClick={() => {
@@ -554,46 +549,33 @@ export default function MontanteDetailPage() {
             <p className="text-gray-500">Aucun palier pour le moment</p>
           ) : (
             <div className="space-y-4">
-              {montante.paliers.map((palier, index) => (
+              {montante.paliers.map((palier) => (
                 <div key={palier.id} className="border rounded-lg p-4">
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
                       <div className="flex items-center space-x-4 mb-2">
-                        <h4 className="font-semibold">Palier {index + 1}</h4>
+                        <h4 className="font-semibold">Palier {palier.numero}</h4>
                         <span className={`px-2 py-1 text-xs rounded-full ${
-                          palier.status === 'EN_ATTENTE' ? 'bg-gray-100 text-gray-700' :
-                          palier.status === 'GAGNE' ? 'bg-green-100 text-green-700' :
+                          palier.statut === 'en_attente' ? 'bg-gray-100 text-gray-700' :
+                          palier.statut === 'GAGNE' ? 'bg-green-100 text-green-700' :
                           'bg-red-100 text-red-700'
                         }`}>
-                          {palier.status === 'EN_ATTENTE' ? 'En attente' :
-                           palier.status === 'GAGNE' ? 'Gagné' : 'Perdu'}
+                          {palier.statut === 'en_attente' ? 'En attente' :
+                           palier.statut === 'GAGNE' ? 'Gagné' : 'Perdu'}
                         </span>
                       </div>
                       
                       <div className="text-sm text-gray-600 space-y-1">
-                        <p><strong>Type:</strong> {palier.typePari} | <strong>Bookmaker:</strong> {palier.bookmaker?.nom || 'N/A'}</p>
-                        <div className="mt-2">
-                          {palier.sports?.map((sport, idx) => (
-                            <div key={idx} className="mb-2 p-2 bg-gray-50 rounded">
-                              <p><strong>Sport:</strong> {sport}</p>
-                              <p><strong>Match:</strong> {palier.matchs?.[idx] || 'N/A'}</p>
-                              <p><strong>Type de pari:</strong> {palier.typeParis?.[idx] || 'N/A'} | <strong>Pronostic:</strong> {palier.pronostics?.[idx] || 'N/A'}</p>
-                              <p><strong>Cote:</strong> {palier.cotes?.[idx] || 'N/A'}</p>
-                              {palier.dateParis?.[idx] && (
-                                <p><strong>Date:</strong> {new Date(palier.dateParis[idx]).toLocaleString('fr-FR')}</p>
-                              )}
-                            </div>
-                          ))}
-                        </div>
+                        <p>{palier.description}</p>
                         <p className="font-semibold">
-                          Cote totale: {palier.coteTotale} | Mise: {palier.mise.toFixed(2)} € → Gain potentiel: {palier.gainPotentiel.toFixed(2)} €
+                          Cote: {palier.cote} | Mise: {palier.mise.toFixed(2)} € → Gain potentiel: {palier.gainPotentiel.toFixed(2)} €
                         </p>
                       </div>
                     </div>
                     
                     {/* Actions */}
                     <div className="flex space-x-2 ml-4">
-                      {palier.status === 'EN_ATTENTE' && montante.status === 'EN_COURS' && (
+                      {palier.statut === 'en_attente' && montante.statut === 'en_cours' && (
                         <>
                           <button
                             onClick={() => updatePalierStatus(palier.id, 'GAGNE')}
