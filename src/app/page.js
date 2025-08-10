@@ -25,7 +25,16 @@ export default function Home() {
         console.log('API montantes response:', data) // Debug
         // FIX: L'API retourne { montantes: [...] }, pas directement le tableau
         const montantesArray = Array.isArray(data) ? data : (data.montantes || [])
-        setMontantes(montantesArray
+        setMontantes(montantesArray)
+      } else {
+        console.error('Erreur API montantes:', response.status)
+        setMontantes([])
+      }
+    } catch (error) {
+      console.error('Erreur chargement montantes:', error)
+      setMontantes([])
+    }
+  }
 
   const fetchBankroll = async () => {
     try {
