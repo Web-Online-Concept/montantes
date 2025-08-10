@@ -4,38 +4,23 @@ const prisma = new PrismaClient()
 async function main() {
   // Création des bookmakers
   const bookmakers = [
-    { nom: 'Stake', code: 'STAKE', ordre: 1 },
-    { nom: 'PS3838', code: 'PS3838', ordre: 2 },
-    { nom: 'Winamax', code: 'WINA', ordre: 3 },
-    { nom: 'Betclic', code: 'BETC', ordre: 4 },
-    { nom: 'Paris Sportifs En Ligne', code: 'PSEL', ordre: 5 },
-    { nom: 'Unibet', code: 'UNI', ordre: 6 },
+    { nom: 'Stake', couleur: '#8B00FF' },
+    { nom: 'PS3838', couleur: '#FF6B00' },
+    { nom: 'Winamax', couleur: '#000000' },
+    { nom: 'Betclic', couleur: '#FF0000' },
+    { nom: 'Paris Sportifs En Ligne', couleur: '#0066CC' },
+    { nom: 'Unibet', couleur: '#14805E' },
   ]
 
   for (const bookmaker of bookmakers) {
     await prisma.bookmaker.upsert({
-      where: { code: bookmaker.code },
+      where: { nom: bookmaker.nom },
       update: {},
       create: bookmaker,
     })
   }
 
   console.log('✅ Bookmakers créés avec succès !')
-  
-  // Initialiser la bankroll à 0
-  const existingBankroll = await prisma.bankroll.findFirst()
-  
-  if (!existingBankroll) {
-    await prisma.bankroll.create({
-      data: {
-        montant: 0,
-        description: 'Initialisation de la bankroll'
-      }
-    })
-    console.log('✅ Bankroll initialisée !')
-  } else {
-    console.log('ℹ️ Bankroll déjà existante')
-  }
 }
 
 main()
