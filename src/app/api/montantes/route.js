@@ -1,20 +1,23 @@
 import { NextResponse } from 'next/server'
-// import { prisma } from '@/lib/prisma' // Commenté pour l'instant
+import { prisma } from '@/lib/prisma'
 import { isAuthenticated } from '@/lib/auth'
-
-// Données en mémoire pour l'instant (utilisation de global pour partager entre les routes)
-global.montantes = global.montantes || []
-global.montanteIdCounter = global.montanteIdCounter || 1
 
 // Récupérer toutes les montantes (public en lecture)
 export async function GET() {
   try {
-    // Pour l'instant, on retourne les données en mémoire avec les relations
-    const montantesAvecRelations = global.montantes.map(montante => ({
-      ...montante,
-      paliers: montante.paliers || []
-    }))
-    return NextResponse.json(montantesAvecRelations)
+    const montantes = await prisma.montante.findMany({
+      include: {
+        paliers: {
+          include: {
+            bookmaker: true
+          },
+          orderBy: { createdAt: 'asc' }
+        }
+      },
+      orderBy: { createdAt: 'desc' }
+    })
+    
+    return NextResponse.json(montantes)
   } catch (error) {
     console.error('Erreur GET montantes:', error)
     return NextResponse.json(
@@ -43,22 +46,20 @@ export async function POST(request) {
     }
     
     // Création de la nouvelle montante
-    const nouvelleMontante = {
-      id: global.montanteIdCounter.toString(),
-      miseInitiale: parseFloat(data.miseInitiale),
-      objectif: data.objectif,
-      status: 'EN_COURS',
-      gainFinal: null,
-      dateDebut: new Date().toISOString(),
-      dateFin: null,
-      paliers: []
-    }
-    
-    global.montantes.push(nouvelleMontante)
-    global.montanteIdCounter++
-    
-    // Simuler la mise à jour de la bankroll
-    // TODO: Implémenter avec la vraie DB
+    const nouvelleMontante = await prisma.montante.create({
+      data: {
+        miseInitiale: parseFloat(data.miseInitiale),
+        objectif: data.objectif,
+        status: 'EN_COURS',
+        miseActuelle: parseFloat(data.miseInitiale),
+        gainFinal: 0,
+        dateDebut: new Date(),
+        dateFin: null
+      },
+      include: {
+        paliers: true
+      }
+    })
     
     return NextResponse.json(nouvelleMontante)
   } catch (error) {
@@ -79,9 +80,13 @@ export async function PUT(request) {
 
   try {
     const data = await request.json()
-    const montanteIndex = global.montantes.findIndex(m => m.id === data.id)
     
-    if (montanteIndex === -1) {
+    // Vérifier que la montante existe
+    const montanteExistante = await prisma.montante.findUnique({
+      where: { id: data.id }
+    })
+    
+    if (!montanteExistante) {
       return NextResponse.json(
         { error: 'Montante non trouvée' },
         { status: 404 }
@@ -89,14 +94,24 @@ export async function PUT(request) {
     }
     
     // Mise à jour de la montante
-    global.montantes[montanteIndex] = {
-      ...global.montantes[montanteIndex],
-      status: data.status,
-      gainFinal: data.gainFinal || montantes[montanteIndex].gainFinal,
-      dateFin: data.status !== 'EN_COURS' ? new Date().toISOString() : null
-    }
+    const montanteMiseAJour = await prisma.montante.update({
+      where: { id: data.id },
+      data: {
+        status: data.status || montanteExistante.status,
+        gainFinal: data.gainFinal !== undefined ? data.gainFinal : montanteExistante.gainFinal,
+        miseActuelle: data.miseActuelle || montanteExistante.miseActuelle,
+        dateFin: data.status && data.status !== 'EN_COURS' ? new Date() : null
+      },
+      include: {
+        paliers: {
+          include: {
+            bookmaker: true
+          }
+        }
+      }
+    })
     
-    return NextResponse.json(global.montantes[montanteIndex])
+    return NextResponse.json(montanteMiseAJour)
   } catch (error) {
     console.error('Erreur PUT montante:', error)
     return NextResponse.json(
