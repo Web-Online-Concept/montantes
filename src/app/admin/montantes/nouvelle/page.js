@@ -21,15 +21,7 @@ export default function NouvelleMontantePage() {
       const response = await fetch('/api/montantes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          miseInitiale: parseFloat(formData.miseInitiale),
-          objectif: formData.objectif,
-          bookmakerId: 1, // Premier bookmaker par défaut
-          premierPalier: {
-            cote: 1.01,
-            description: 'À définir'
-          }
-        })
+        body: JSON.stringify(formData)
       })
 
       if (!response.ok) {

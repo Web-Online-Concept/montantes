@@ -39,24 +39,14 @@ export async function POST(request) {
   try {
     const data = await request.json();
     
-    // Créer la montante avec le premier palier
+    // Créer la montante SANS palier
     const nouvelleMontante = await prisma.montante.create({
       data: {
-        bookmakerId: data.bookmakerId,
+        bookmakerId: data.bookmakerId || 1, // Bookmaker par défaut si non spécifié
         miseInitiale: parseFloat(data.miseInitiale),
         objectif: data.objectif,
         statut: 'en_cours',
-        palierActuel: 1,
-        paliers: {
-          create: {
-            numero: 1,
-            mise: parseFloat(data.miseInitiale),
-            cote: parseFloat(data.premierPalier.cote),
-            description: data.premierPalier.description || '',
-            statut: 'en_attente',
-            gainPotentiel: parseFloat(data.miseInitiale) * parseFloat(data.premierPalier.cote)
-          }
-        }
+        palierActuel: 0 // Pas de palier au début
       },
       include: {
         bookmaker: true,
