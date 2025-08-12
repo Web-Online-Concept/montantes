@@ -7,58 +7,117 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Bookmaker {
-  id        Int      @id @default(autoincrement())
-  nom       String   @unique
-  couleur   String   @default("#3B82F6")
-  
-  montantes Montante[]
-  
+// Table pour l'authentification admin
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hash bcrypt
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+// Table pour les paramètres globaux (bankroll)
+model Settings {
+  id                 String   @id @default(uuid())
+  bankrollInitiale   Float    @default(0)
+  bankrollActuelle   Float    @default(0)
+  bankrollDisponible Float    @default(0) // Bankroll - mises engagées
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+// Table pour l'historique de la bankroll
+model HistoriqueBankroll {
+  id            String         @id @default(uuid())
+  typeOperation TypeOperation
+  montant       Float
+  montantAvant  Float
+  montantApres  Float
+  description   String
+  montanteId    String?        // Référence optionnelle à une montante
+  montante      Montante?      @relation(fields: [montanteId], references: [id], onDelete: SetNull)
+  createdAt     DateTime       @default(now())
+}
+
+// Table pour les montantes
 model Montante {
-  id            Int       @id @default(autoincrement())
-  bookmakerId   Int
-  bookmaker     Bookmaker @relation(fields: [bookmakerId], references: [id])
-  miseInitiale  Float
-  objectif      String    // "X2", "X3", "X5", "X10"
-  statut        String    @default("en_cours") // "en_cours", "GAGNEE", "PERDUE"
-  palierActuel  Int       @default(1)
-  gainFinal     Float     @default(0)
+  id               String       @id @default(uuid())
+  numero           Int          @default(autoincrement()) // Numéro unique auto-incrémenté
+  nom              String
+  miseInitiale     Float
+  miseEngagee      Float        @default(0) // Montant actuellement en jeu
+  gainActuel       Float?       // Gain du dernier palier gagné
+  gainFinal        Float?       // Gain final si montante terminée
+  objectif         Objectif     @default(X3)
+  progression      Float        @default(0) // Pourcentage de progression
+  roi              Float        @default(0) // Return on Investment
+  etat             EtatMontante @default(EN_COURS)
+  dureeJours       Int          @default(0)
+  dateDebut        DateTime     @default(now())
+  dateFin          DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
   
-  paliers       Palier[]
-  transactions  Transaction[]
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  dateFin       DateTime?
+  // Relations
+  paliers          Palier[]
+  historique       HistoriqueBankroll[]
 }
 
+// Table pour les paliers
 model Palier {
-  id            Int      @id @default(autoincrement())
-  montanteId    Int
-  montante      Montante @relation(fields: [montanteId], references: [id], onDelete: Cascade)
-  numero        Int
-  mise          Float
-  cote          Float
-  description   String   @default("")
-  statut        String   @default("en_attente") // "en_attente", "GAGNE", "PERDU"
-  gainPotentiel Float
-  dateResultat  DateTime?
+  id                String       @id @default(uuid())
+  montanteId        String
+  montante          Montante     @relation(fields: [montanteId], references: [id], onDelete: Cascade)
+  numeroPalier      Int
+  mise              Float
+  cote              Float
+  typePari          TypePari     @default(SIMPLE)
+  detailsMatchs     Json         // Structure: { matchs: [{ sport, equipe1, equipe2, competition, pronostic }] }
+  gain              Float?
+  progressionTotale Float        @default(0) // Progression depuis le début
+  statut            StatutPalier @default(EN_ATTENTE)
+  dateMatch         DateTime
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
   
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  @@unique([montanteId, numeroPalier])
 }
 
-model Transaction {
-  id          Int      @id @default(autoincrement())
-  montant     Float
-  description String
-  type        String   // "MANUAL", "MONTANTE_WIN", "MONTANTE_LOSS"
-  montanteId  Int?
-  montante    Montante? @relation(fields: [montanteId], references: [id])
-  
-  createdAt   DateTime @default(now())
+// Enums pour les objectifs de montante
+enum Objectif {
+  X2
+  X3
+  X5
+  X10
+}
+
+// Enums pour l'état d'une montante
+enum EtatMontante {
+  EN_COURS
+  REUSSI
+  PERDU
+  ARRETEE
+}
+
+// Enums pour les types d'opération bankroll
+enum TypeOperation {
+  DEPOT
+  RETRAIT
+  GAIN_MONTANTE
+  PERTE_MONTANTE
+  REMBOURSEMENT // Pour les annulations
+}
+
+// Enums pour le type de pari
+enum TypePari {
+  SIMPLE
+  COMBINE
+}
+
+// Enums pour le statut d'un palier
+enum StatutPalier {
+  EN_ATTENTE
+  GAGNE
+  PERDU
+  ANNULE // Match annulé, mise remboursée
 }

@@ -1,9 +1,35 @@
+# Robots.txt pour Montantes.pro
+# https://montantes.pro
+
+# Autoriser tous les robots
 User-agent: *
 Allow: /
 
-# Bloque l'accès à l'administration
+# Bloquer l'accès à l'administration
 Disallow: /admin/
 Disallow: /api/
 
+# Bloquer les fichiers sensibles
+Disallow: /*.json$
+Disallow: /*.xml$
+Disallow: /*.config.js$
+Disallow: /.*
+
+# Autoriser le sitemap
+Allow: /sitemap.xml
+
 # Sitemap
 Sitemap: https://montantes.pro/sitemap.xml
+
+# Crawl-delay pour éviter la surcharge
+Crawl-delay: 1
+
+# Spécifique pour Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Spécifique pour Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
