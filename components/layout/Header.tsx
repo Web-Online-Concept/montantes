@@ -117,14 +117,14 @@ export default function Header() {
 
         {/* Menu Mobile Ouvert */}
         {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
+          <div className="md:hidden fixed inset-0 top-16 bg-[#1e40af] z-40">
+            <div className="space-y-1 px-2 pb-3 pt-2 h-full overflow-y-auto">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium ${
+                  className={`block px-3 py-2 rounded-md text-base font-medium text-center ${
                     isActive(item.href)
                       ? 'bg-[#fbbf24] text-[#1e40af]'
                       : 'text-white hover:bg-[#2563eb]'
@@ -134,7 +134,7 @@ export default function Header() {
                 </Link>
               ))}
               {bankroll !== null && (
-                <div className="bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg mt-2">
+                <div className="bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg mt-2 text-center">
                   <p className="text-xs text-[#fbbf24]">Bankroll</p>
                   <p className="text-white font-bold">{formatEuro(bankroll)}</p>
                 </div>
