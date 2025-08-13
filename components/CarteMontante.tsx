@@ -22,7 +22,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
     } else {
       // Fallback par défaut
       etatConfig = {
-        label: montante.etat,
+        label: 'Inconnu',
         couleur: '#6b7280',
         emoji: '⏹️' as const
       }
