@@ -69,14 +69,23 @@ export default function Header() {
             ))}
           </div>
 
-          {/* Bankroll Desktop */}
-          <div className="hidden md:flex md:items-center">
+          {/* Bankroll + Stake Desktop */}
+          <div className="hidden md:flex md:items-center md:space-x-3">
             {bankroll !== null && (
               <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
                 <p className="text-xs text-[#fbbf24]">Bankroll</p>
                 <p className="text-white font-bold">{formatEuro(bankroll)}</p>
               </div>
             )}
+            <a
+              href="https://rounders.pro/jouer-sur-stake"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg hover:bg-white/20 transition-colors"
+            >
+              <p className="text-xs text-[#fbbf24]">Jouer sur</p>
+              <p className="text-white font-bold">Stake</p>
+            </a>
           </div>
 
           {/* Menu Mobile */}
@@ -121,6 +130,16 @@ export default function Header() {
                   <p className="text-white font-bold">{formatEuro(bankroll)}</p>
                 </div>
               )}
+              <a
+                href="https://rounders.pro/jouer-sur-stake"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg mt-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <p className="text-xs text-[#fbbf24]">Jouer sur</p>
+                <p className="text-white font-bold">Stake</p>
+              </a>
             </div>
           </div>
         )}
