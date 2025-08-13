@@ -69,98 +69,126 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-800 to-blue-900 text-white py-8 md:py-16">
+      <div className="bg-gradient-to-br from-blue-800 to-blue-900 text-white py-6 md:py-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-2xl md:text-5xl font-bold mb-4">
+          <h1 className="text-2xl md:text-5xl font-bold mb-3 md:mb-4">
             <span className="block md:inline">Gestion de Montantes</span>
             <span className="block md:inline"> Paris Sportifs</span>
           </h1>
-          <p className="text-base md:text-xl text-blue-100 mb-4 md:mb-0">
+          <p className="text-sm md:text-xl text-blue-100 mb-2 md:mb-0">
             Suivez nos montantes avec notre système transparent et nos statistiques détaillées
           </p>
         </div>
       </div>
 
-      {/* Stats Section */}
+      {/* Stats Section - Optimisé pour mobile */}
       {stats && (
-        <div className="max-w-7xl mx-auto px-4 -mt-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <StatsCard
-              title="Bankroll actuelle"
-              value={formatEuro(stats.bankrollActuelle || 0)}
-              variation={stats.bankrollInitiale > 0 ? 
-                ((stats.bankrollActuelle - stats.bankrollInitiale) / stats.bankrollInitiale) * 100
-                : stats.bankrollActuelle > 0 ? 100 : 0}
-              icon="💰"
-              color="primary"
-            />
-            <StatsCard
-              title="Montantes actives"
-              value={stats.enCours?.toString() || '0'}
-              subtitle={`Sur ${stats.nombreTotal || 0} au total`}
-              icon="📊"
-              color="accent"
-            />
-            <StatsCard
-              title="Performance globale"
-              value={formatPourcentage(stats.tauxReussite || 0)}
-              subtitle={`ROI: ${formatPourcentage(stats.roi || 0)}`}
-              icon="📈"
-              color={stats.roi > 0 ? "success" : "warning"}
-            />
+        <div className="max-w-7xl mx-auto px-4 -mt-6 md:-mt-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+            {/* Bankroll sur toute la largeur sur mobile */}
+            <div className="col-span-2 md:col-span-1">
+              <StatsCard
+                title="Bankroll actuelle"
+                value={formatEuro(stats.bankrollActuelle || 0)}
+                variation={stats.bankrollInitiale > 0 ? 
+                  ((stats.bankrollActuelle - stats.bankrollInitiale) / stats.bankrollInitiale) * 100
+                  : stats.bankrollActuelle > 0 ? 100 : 0}
+                icon="💰"
+                color="primary"
+              />
+            </div>
+            {/* Montantes actives et Performance côte à côte sur mobile */}
+            <div className="col-span-1">
+              <StatsCard
+                title="Montantes actives"
+                value={stats.enCours?.toString() || '0'}
+                subtitle={`Sur ${stats.nombreTotal || 0}`}
+                icon="📊"
+                color="accent"
+                compact={true}
+              />
+            </div>
+            <div className="col-span-1">
+              <StatsCard
+                title="Performance"
+                value={formatPourcentage(stats.tauxReussite || 0)}
+                subtitle={`ROI: ${formatPourcentage(stats.roi || 0)}`}
+                icon="📈"
+                color={stats.roi > 0 ? "success" : "warning"}
+                compact={true}
+              />
+            </div>
           </div>
         </div>
       )}
 
-      {/* Filtres et tri */}
-      <div className="max-w-7xl mx-auto px-4 mt-12 mb-8">
-        <div className="bg-white rounded-xl shadow-sm p-6">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            {/* Filtres */}
-            <div className="flex flex-wrap gap-2">
-              <button
-                onClick={() => setFiltre('toutes')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                  filtre === 'toutes' 
-                    ? 'bg-blue-800 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                Toutes ({montantes.length})
-              </button>
-              {(['EN_COURS', 'REUSSI', 'PERDU'] as const).map(etat => (
-                <button
-                  key={etat}
-                  onClick={() => setFiltre(etat)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                    filtre === etat 
-                      ? 'bg-blue-800 text-white' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  <span className="mr-1">{ETATS_CONFIG[etat].emoji}</span>
-                  {ETATS_CONFIG[etat].label} ({montantes.filter(m => {
-                    // Compter ARRETEE comme REUSSI
-                    if (etat === 'REUSSI') {
-                      return m.etat === 'REUSSI' || m.etat === 'ARRETEE'
-                    }
-                    return m.etat === etat
-                  }).length})
-                </button>
-              ))}
-            </div>
-
-            {/* Tri */}
+      {/* Filtres et tri - Optimisé pour mobile */}
+      <div className="max-w-7xl mx-auto px-4 mt-6 md:mt-12 mb-6 md:mb-8">
+        <div className="bg-white rounded-xl shadow-sm p-4 md:p-6">
+          {/* Tri en premier sur mobile */}
+          <div className="mb-4 md:hidden">
             <select
               value={tri}
               onChange={(e) => setTri(e.target.value as TriMontante)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
             >
               <option value="recent">Plus récentes</option>
               <option value="ancien">Plus anciennes</option>
               <option value="progression">Progression ↓</option>
               <option value="mise">Mise ↓</option>
             </select>
+          </div>
+
+          {/* Filtres en grille 2x2 sur mobile */}
+          <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:gap-2 md:items-center md:justify-between">
+            <button
+              onClick={() => setFiltre('toutes')}
+              className={`px-3 py-2 rounded-lg font-medium transition-colors text-sm md:text-base ${
+                filtre === 'toutes' 
+                  ? 'bg-blue-800 text-white' 
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              Toutes ({montantes.length})
+            </button>
+            {(['EN_COURS', 'REUSSI', 'PERDU'] as const).map(etat => (
+              <button
+                key={etat}
+                onClick={() => setFiltre(etat)}
+                className={`px-3 py-2 rounded-lg font-medium transition-colors text-sm md:text-base ${
+                  filtre === etat 
+                    ? 'bg-blue-800 text-white' 
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                <span className="mr-1">{ETATS_CONFIG[etat].emoji}</span>
+                <span className="hidden sm:inline">{ETATS_CONFIG[etat].label}</span>
+                <span className="sm:hidden">
+                  {etat === 'EN_COURS' ? 'En cours' : 
+                   etat === 'REUSSI' ? 'Gagnées' : 'Perdues'}
+                </span>
+                <span className="ml-1">({montantes.filter(m => {
+                  if (etat === 'REUSSI') {
+                    return m.etat === 'REUSSI' || m.etat === 'ARRETEE'
+                  }
+                  return m.etat === etat
+                }).length})</span>
+              </button>
+            ))}
+
+            {/* Tri sur desktop uniquement */}
+            <div className="hidden md:block">
+              <select
+                value={tri}
+                onChange={(e) => setTri(e.target.value as TriMontante)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="recent">Plus récentes</option>
+                <option value="ancien">Plus anciennes</option>
+                <option value="progression">Progression ↓</option>
+                <option value="mise">Mise ↓</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -172,7 +200,7 @@ export default function HomePage() {
             <p className="text-gray-500 text-lg">Aucune montante trouvée</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {montantesTriees.map((montante) => (
               <CarteMontante key={montante.id} montante={montante} />
             ))}
@@ -181,21 +209,21 @@ export default function HomePage() {
       </div>
 
       {/* CTA Telegram */}
-      <div className="bg-blue-900 text-white pt-8 pb-0 md:py-12">
-        <div className="max-w-4xl mx-auto px-4 text-center pb-8 md:pb-0">
-          <h2 className="text-2xl font-bold mb-4">
+      <div className="bg-blue-900 text-white pt-6 pb-0 md:py-12">
+        <div className="max-w-4xl mx-auto px-4 text-center pb-6 md:pb-0">
+          <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">
             Suivez nos montantes en direct sur Telegram
           </h2>
-          <p className="text-blue-100 mb-6">
+          <p className="text-sm md:text-base text-blue-100 mb-4 md:mb-6">
             Recevez les notifications en temps réel et ne manquez aucun palier
           </p>
           <a
             href="https://t.me/montantespro"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors"
+            className="inline-flex items-center gap-2 bg-white text-blue-900 px-5 py-2.5 md:px-6 md:py-3 rounded-lg font-semibold hover:bg-blue-50 transition-colors text-sm md:text-base"
           >
-            <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+            <svg className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.14.18-.357.295-.6.295-.002 0-.003 0-.005 0l.213-3.054 5.56-5.022c.24-.213-.054-.334-.373-.121l-6.869 4.326-2.96-.924c-.64-.203-.658-.64.135-.954l11.566-4.458c.538-.196 1.006.128.832.941z"/>
             </svg>
             Rejoindre le canal Telegram
