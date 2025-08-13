@@ -29,42 +29,42 @@ export const metadata: Metadata = {
   },
 }
 
-// Données structurées pour la page de statistiques
-export const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'DataCatalog',
-  name: 'Statistiques Montantes.pro',
-  description: 'Statistiques et analyses de performance des montantes sportives',
-  url: 'https://montantes.pro/statistiques',
-  provider: {
-    '@type': 'Organization',
-    name: 'Montantes.pro',
-    url: 'https://montantes.pro',
-  },
-  dataset: [
-    {
-      '@type': 'Dataset',
-      name: 'Taux de réussite',
-      description: 'Pourcentage de montantes gagnées',
-    },
-    {
-      '@type': 'Dataset',
-      name: 'ROI Global',
-      description: 'Return on Investment global',
-    },
-    {
-      '@type': 'Dataset',
-      name: 'Évolution bankroll',
-      description: 'Progression de la bankroll dans le temps',
-    },
-  ],
-}
-
 export default function StatistiquesLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  // Données structurées pour la page de statistiques (sans export)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'DataCatalog',
+    name: 'Statistiques Montantes.pro',
+    description: 'Statistiques et analyses de performance des montantes sportives',
+    url: 'https://montantes.pro/statistiques',
+    provider: {
+      '@type': 'Organization',
+      name: 'Montantes.pro',
+      url: 'https://montantes.pro',
+    },
+    dataset: [
+      {
+        '@type': 'Dataset',
+        name: 'Taux de réussite',
+        description: 'Pourcentage de montantes gagnées',
+      },
+      {
+        '@type': 'Dataset',
+        name: 'ROI Global',
+        description: 'Return on Investment global',
+      },
+      {
+        '@type': 'Dataset',
+        name: 'Évolution bankroll',
+        description: 'Progression de la bankroll dans le temps',
+      },
+    ],
+  }
+
   return (
     <>
       <script
