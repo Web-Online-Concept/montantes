@@ -117,7 +117,7 @@ export default function ValidationMatchsCombine({
             <div className="flex items-center justify-between">
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-xl">{SPORTS_ICONS[match.sport] || &apos;⚽&apos;}</span>
+                  <span className="text-xl">{SPORTS_ICONS[match.sport] || '⚽'}</span>
                   <div>
                     <p className="font-medium">
                       {match.equipe1} - {match.equipe2}
