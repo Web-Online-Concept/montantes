@@ -211,11 +211,7 @@ export default function HistoriquePage() {
               </button>
             </div>
             <GraphiqueProgression
-              data={historique.map(item => ({
-                date: new Date(item.createdAt).toLocaleDateString('fr-FR'),
-                montant: item.montantApres,
-                type: item.typeOperation
-              }))}
+              data={historique}
             />
           </div>
         )}
