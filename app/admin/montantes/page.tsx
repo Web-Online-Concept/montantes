@@ -213,18 +213,11 @@ export default function AdminMontantesPage() {
                   </tr>
                 ) : (
                   montantesFiltrees.map((montante) => {
-                    // Gestion du cas où l'état ARRETEE existe encore
-                    let etatConfig = ETATS_CONFIG[montante.etat as keyof typeof ETATS_CONFIG]
-                    if (!etatConfig) {
-                      if (montante.etat === 'ARRETEE') {
-                        etatConfig = ETATS_CONFIG.REUSSI
-                      } else {
-                        etatConfig = {
-                          label: montante.etat,
-                          couleur: '#6b7280',
-                          emoji: '❓'
-                        }
-                      }
+                    // Gestion du cas où l'état existe dans ETATS_CONFIG
+                    const etatConfig = ETATS_CONFIG[montante.etat as keyof typeof ETATS_CONFIG] || {
+                      label: montante.etat,
+                      couleur: '#6b7280',
+                      emoji: '⏹️' as const
                     }
                     
                     return (
