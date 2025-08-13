@@ -592,7 +592,7 @@ export default function EditerMontantePage() {
               {paliers.find(p => p.id === showValidationCombine) && (
                 <ValidationMatchsCombine
                   palierId={showValidationCombine}
-                  matchs={paliers.find(p => p.id === showValidationCombine)!.detailsMatchs.matchs}
+                  matchs={paliers.find(p => p.id === showValidationCombine)!.detailsMatchs.matchs as any}
                   mise={paliers.find(p => p.id === showValidationCombine)!.mise}
                   onValidation={(matchsStatuts) => handleValidationCombine(showValidationCombine, matchsStatuts)}
                   loading={updatingPalier === showValidationCombine}
