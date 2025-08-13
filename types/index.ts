@@ -129,7 +129,7 @@ export interface StatsGlobales {
   enCours: number
   reussies: number
   perdues: number
-  arretees: number  // AJOUT de la propriété manquante
+  arretees: number
   tauxReussite: number
   roi: number
   gainsTotaux: number
