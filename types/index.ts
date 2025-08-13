@@ -4,15 +4,15 @@ export type {
   Palier,
   HistoriqueBankroll,
   Settings,
-  Admin,
-  EtatMontante,
-  TypeOperation,
-  TypePari,
-  StatutPalier
+  Admin
 } from '@prisma/client'
 
-// Définir Objectif manuellement car il semble ne pas être exporté correctement
+// Définir les enums manuellement car ils ne sont pas exportés correctement
 export type Objectif = 'X2' | 'X3' | 'X5' | 'X10'
+export type EtatMontante = 'EN_COURS' | 'REUSSI' | 'PERDU' | 'ARRETEE'
+export type TypeOperation = 'DEPOT' | 'RETRAIT' | 'GAIN_MONTANTE' | 'PERTE_MONTANTE' | 'REMBOURSEMENT'
+export type TypePari = 'SIMPLE' | 'COMBINE'
+export type StatutPalier = 'EN_ATTENTE' | 'GAGNE' | 'PERDU' | 'ANNULE'
 
 // Types étendus avec infos calculées
 export interface MontanteAvecNumero {
