@@ -1,81 +1,74 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { StatsGlobales, formatEuro, formatPourcentage, ETATS_CONFIG } from '@/types'
-import StatsCard from '@/components/StatsCard'
+import { MontanteAvecNumero, formatEuro, formatPourcentage, ETATS_CONFIG } from '@/types'
 import AdminLayout from '@/components/admin/AdminLayout'
 
-interface DashboardData {
-  stats: StatsGlobales
-  montantesRecentes: any[]
-  derniersMovements: any[]
-}
-
-export default function AdminDashboardPage() {
-  const router = useRouter()
-  const [data, setData] = useState<DashboardData | null>(null)
+export default function AdminMontantesPage() {
+  const [montantes, setMontantes] = useState<MontanteAvecNumero[]>([])
+  const [filtreEtat, setFiltreEtat] = useState<'toutes' | 'EN_COURS' | 'REUSSI' | 'PERDU' | 'ARRETEE'>('toutes')
+  const [recherche, setRecherche] = useState('')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchDashboardData()
+    fetchMontantes()
   }, [])
 
-  const fetchDashboardData = async () => {
+  const fetchMontantes = async () => {
     try {
-      // Stats globales
-      const statsRes = await fetch('/api/stats')
-      if (!statsRes.ok) throw new Error('Erreur stats')
-      const stats = await statsRes.json()
-
-      // Montantes récentes
-      const montantesRes = await fetch('/api/montantes')
-      if (!montantesRes.ok) throw new Error('Erreur montantes')
-      const montantes = await montantesRes.json()
-      const montantesRecentes = montantes.slice(0, 5)
-
-      // Derniers mouvements bankroll
-      const histoRes = await fetch('/api/historique?periode=7j')
-      if (!histoRes.ok) throw new Error('Erreur historique')
-      const historique = await histoRes.json()
-      const derniersMovements = historique.historique.slice(0, 5)
-
-      setData({
-        stats,
-        montantesRecentes,
-        derniersMovements
-      })
+      const response = await fetch('/api/montantes')
+      if (response.ok) {
+        const data = await response.json()
+        setMontantes(data)
+      }
     } catch (error) {
-      console.error('Erreur chargement dashboard:', error)
+      console.error('Erreur chargement montantes:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  // Fonction pour obtenir la configuration d'état
-  const getEtatConfig = (etat: string) => {
-    const config = ETATS_CONFIG[etat as keyof typeof ETATS_CONFIG]
-    
-    if (config) {
-      return config
+  const handleDelete = async (id: string, nom: string) => {
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer la montante "${nom}" ?\n\nCette action est irréversible et les montantes seront renumérotées automatiquement.`)) {
+      return
     }
-    
-    // Retourner un objet par défaut compatible avec le type
-    return {
-      label: 'Inconnu' as const,
-      couleur: '#6b7280' as const,
-      emoji: '⏹️' as const
+
+    try {
+      const response = await fetch(`/api/montantes?id=${id}`, {
+        method: 'DELETE'
+      })
+
+      if (response.ok) {
+        // Recharger la liste pour voir la nouvelle numérotation
+        await fetchMontantes()
+      } else {
+        alert('Erreur lors de la suppression')
+      }
+    } catch (error) {
+      console.error('Erreur suppression:', error)
+      alert('Erreur lors de la suppression')
     }
   }
 
-  // Fonction pour obtenir les classes CSS selon l'état
-  const getEtatClasses = (etat: string) => {
-    if (etat === 'EN_COURS') return 'bg-blue-100 text-blue-800'
-    if (etat === 'REUSSI' || etat === 'ARRETEE') return 'bg-green-100 text-green-800'
-    if (etat === 'PERDU') return 'bg-red-100 text-red-800'
-    return 'bg-gray-100 text-gray-800'
-  }
+  // Filtrer les montantes
+  const montantesFiltrees = montantes.filter(montante => {
+    // Filtre par état
+    if (filtreEtat !== 'toutes' && montante.etat !== filtreEtat) {
+      return false
+    }
+    
+    // Filtre par recherche
+    if (recherche) {
+      const searchLower = recherche.toLowerCase()
+      return (
+        montante.nom.toLowerCase().includes(searchLower) ||
+        `n°${montante.numeroAffichage}`.includes(searchLower)
+      )
+    }
+    
+    return true
+  })
 
   if (loading) {
     return (
@@ -87,182 +80,223 @@ export default function AdminDashboardPage() {
     )
   }
 
-  if (!data) {
-    return (
-      <AdminLayout>
-        <div className="text-center text-gray-500">Erreur de chargement</div>
-      </AdminLayout>
-    )
-  }
-
   return (
     <AdminLayout>
-      <div className="space-y-8">
-        {/* Titre */}
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Dashboard Administration</h1>
-          <p className="text-gray-600 mt-1">Vue d'ensemble et actions rapides</p>
+      <div className="space-y-6">
+        {/* En-tête */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-3xl font-bold text-gray-900">Gestion des montantes</h1>
+          <Link
+            href="/admin/montantes/nouvelle"
+            className="mt-4 sm:mt-0 inline-flex items-center px-4 py-2 bg-[#1e40af] text-white rounded-lg hover:bg-[#1e3a8a] transition-colors"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Nouvelle montante
+          </Link>
         </div>
 
-        {/* Stats principales */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatsCard
-            title="Bankroll actuelle"
-            value={formatEuro(data.stats.bankrollActuelle)}
-            subtitle={`Disponible: ${formatEuro(data.stats.bankrollDisponible)}`}
-            variation={data.stats.bankrollInitiale > 0 
-              ? ((data.stats.bankrollActuelle - data.stats.bankrollInitiale) / data.stats.bankrollInitiale) * 100
-              : data.stats.bankrollActuelle > 0 ? 100 : 0}
-            icon="💰"
-            color="primary"
-          />
-          
-          <StatsCard
-            title="Montantes en cours"
-            value={data.stats.enCours.toString()}
-            subtitle={`Capital engagé: ${formatEuro(data.stats.misesEngagees)}`}
-            icon="⏳"
-            color="accent"
-          />
-          
-          <StatsCard
-            title="Taux de réussite"
-            value={formatPourcentage(data.stats.tauxReussite)}
-            subtitle={`${data.stats.reussies} réussies sur ${data.stats.nombreTotal}`}
-            icon="🎯"
-            color={data.stats.tauxReussite >= 60 ? 'success' : 'warning'}
-          />
-          
-          <StatsCard
-            title="ROI Global"
-            value={formatPourcentage(data.stats.roi)}
-            subtitle={`Bilan: ${formatEuro(data.stats.bilanTotal)}`}
-            icon="📊"
-            color={data.stats.roi > 0 ? 'success' : 'danger'}
-          />
-        </div>
+        {/* Filtres */}
+        <div className="bg-white rounded-lg shadow p-4">
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            {/* Recherche */}
+            <div className="relative flex-1 max-w-md">
+              <input
+                type="text"
+                placeholder="Rechercher par nom ou numéro..."
+                value={recherche}
+                onChange={(e) => setRecherche(e.target.value)}
+                className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fbbf24] focus:border-transparent"
+              />
+              <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
 
-        {/* Actions rapides */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Actions rapides</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Link
-              href="/admin/montantes/nouvelle"
-              className="flex items-center justify-center space-x-2 bg-[#1e40af] text-white px-4 py-3 rounded-lg hover:bg-[#1e3a8a] transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              <span>Nouvelle montante</span>
-            </Link>
-            
-            <Link
-              href="/admin/bankroll"
-              className="flex items-center justify-center space-x-2 bg-[#fbbf24] text-[#1e40af] px-4 py-3 rounded-lg hover:bg-[#f59e0b] transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Gérer bankroll</span>
-            </Link>
-            
-            <Link
-              href="/admin/montantes"
-              className="flex items-center justify-center space-x-2 bg-gray-600 text-white px-4 py-3 rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
-              <span>Toutes les montantes</span>
-            </Link>
+            {/* Filtres par état */}
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => setFiltreEtat('toutes')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filtreEtat === 'toutes'
+                    ? 'bg-[#1e40af] text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Toutes ({montantes.length})
+              </button>
+              <button
+                onClick={() => setFiltreEtat('EN_COURS')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filtreEtat === 'EN_COURS'
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                En cours ({montantes.filter(m => m.etat === 'EN_COURS').length})
+              </button>
+              <button
+                onClick={() => setFiltreEtat('REUSSI')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filtreEtat === 'REUSSI'
+                    ? 'bg-green-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Gagnées ({montantes.filter(m => m.etat === 'REUSSI').length})
+              </button>
+              <button
+                onClick={() => setFiltreEtat('PERDU')}
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  filtreEtat === 'PERDU'
+                    ? 'bg-red-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                Perdues ({montantes.filter(m => m.etat === 'PERDU').length})
+              </button>
+              {montantes.some(m => m.etat === 'ARRETEE') && (
+                <button
+                  onClick={() => setFiltreEtat('ARRETEE')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    filtreEtat === 'ARRETEE'
+                      ? 'bg-orange-600 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Arrêtées ({montantes.filter(m => m.etat === 'ARRETEE').length})
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Montantes récentes */}
-          <div className="bg-white rounded-lg shadow">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Montantes récentes</h2>
-            </div>
-            <div className="p-6">
-              {data.montantesRecentes.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">Aucune montante</p>
-              ) : (
-                <div className="space-y-4">
-                  {data.montantesRecentes.map((montante) => {
-                    const etatConfig = getEtatConfig(montante.etat)
+        {/* Tableau des montantes */}
+        <div className="bg-white rounded-lg shadow overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Montante
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    État
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Mise initiale
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Progression
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Objectif
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Paliers
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date début
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {montantesFiltrees.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="px-6 py-12 text-center text-gray-500">
+                      Aucune montante trouvée
+                    </td>
+                  </tr>
+                ) : (
+                  montantesFiltrees.map((montante) => {
+                    // Gestion du cas où l'état existe dans ETATS_CONFIG
+                    const etatConfig = ETATS_CONFIG[montante.etat as keyof typeof ETATS_CONFIG] || {
+                      label: montante.etat,
+                      couleur: '#6b7280',
+                      emoji: '⏹️' as const
+                    }
+                    
                     return (
-                      <Link
-                        key={montante.id}
-                        href={`/admin/montantes/${montante.id}/editer`}
-                        className="block hover:bg-gray-50 -mx-2 px-2 py-2 rounded transition-colors"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              Montante n°{montante.numeroAffichage}
-                            </p>
-                            <p className="text-sm text-gray-500">{montante.nom}</p>
+                      <tr key={montante.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">
+                            Montante n°{montante.numeroAffichage}
                           </div>
-                          <div className="text-right">
-                            <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getEtatClasses(montante.etat)}`}>
-                              {etatConfig.label}
-                            </span>
-                            <p className="text-sm text-gray-600 mt-1">
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span 
+                            className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                            style={{
+                              backgroundColor: `${etatConfig.couleur}20`,
+                              color: etatConfig.couleur
+                            }}
+                          >
+                            {etatConfig.emoji} {etatConfig.label}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {formatEuro(montante.miseInitiale)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <span className={`text-sm font-medium ${
+                              montante.progression > 0 ? 'text-green-600' : 'text-red-600'
+                            }`}>
                               {formatPourcentage(montante.progression)}
-                            </p>
+                            </span>
                           </div>
-                        </div>
-                      </Link>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {montante.objectif.toLowerCase()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {montante.paliers?.length || 0}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {new Date(montante.dateDebut).toLocaleDateString('fr-FR')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <div className="flex items-center space-x-2">
+                            <Link
+                              href={`/admin/montantes/${montante.id}/editer`}
+                              className="text-[#1e40af] hover:text-[#fbbf24] transition-colors"
+                              title="Éditer"
+                            >
+                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                            </Link>
+                            <Link
+                              href={`/montante/${montante.id}`}
+                              target="_blank"
+                              className="text-gray-600 hover:text-[#1e40af] transition-colors"
+                              title="Voir sur le site"
+                            >
+                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                              </svg>
+                            </Link>
+                            <button
+                              onClick={() => handleDelete(montante.id, montante.nom)}
+                              className="text-red-600 hover:text-red-800 transition-colors"
+                              title="Supprimer"
+                            >
+                              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
                     )
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Derniers mouvements */}
-          <div className="bg-white rounded-lg shadow">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-lg font-semibold text-gray-900">Derniers mouvements</h2>
-            </div>
-            <div className="p-6">
-              {data.derniersMovements.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">Aucun mouvement récent</p>
-              ) : (
-                <div className="space-y-4">
-                  {data.derniersMovements.map((mouvement) => (
-                    <div key={mouvement.id} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                          mouvement.typeOperation === 'DEPOT' ? 'bg-green-100 text-green-600' :
-                          mouvement.typeOperation === 'RETRAIT' ? 'bg-red-100 text-red-600' :
-                          mouvement.typeOperation === 'GAIN_MONTANTE' ? 'bg-blue-100 text-blue-600' :
-                          'bg-orange-100 text-orange-600'
-                        }`}>
-                          {mouvement.typeOperation === 'DEPOT' ? '+' :
-                           mouvement.typeOperation === 'RETRAIT' ? '-' :
-                           mouvement.typeOperation === 'GAIN_MONTANTE' ? '↑' : '↓'}
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium text-gray-900">
-                            {mouvement.typeOperation.replace('_', ' ')}
-                          </p>
-                          <p className="text-xs text-gray-500">
-                            {new Date(mouvement.createdAt).toLocaleDateString('fr-FR')}
-                          </p>
-                        </div>
-                      </div>
-                      <p className={`font-semibold ${
-                        mouvement.montant > 0 ? 'text-green-600' : 'text-red-600'
-                      }`}>
-                        {mouvement.montant > 0 ? '+' : ''}{formatEuro(Math.abs(mouvement.montant))}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                  })
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
