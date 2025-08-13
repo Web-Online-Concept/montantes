@@ -81,7 +81,7 @@ export default function Header() {
               href="https://rounders.pro/jouer-sur-stake"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg hover:bg-white/20 transition-colors"
+              className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg hover:bg-white/20 transition-colors text-center"
             >
               <p className="text-xs text-[#fbbf24]">Jouer sur</p>
               <p className="text-white font-bold">Stake</p>
@@ -134,7 +134,7 @@ export default function Header() {
                 href="https://rounders.pro/jouer-sur-stake"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg mt-2"
+                className="block bg-white/10 backdrop-blur-sm px-3 py-2 rounded-lg mt-2 text-center"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <p className="text-xs text-[#fbbf24]">Jouer sur</p>
