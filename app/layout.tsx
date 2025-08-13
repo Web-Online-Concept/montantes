@@ -71,7 +71,9 @@ export const metadata: Metadata = {
   verification: {
     google: 'votre-code-google-search-console',
     yandex: 'votre-code-yandex',
-    bing: 'votre-code-bing',
+    other: {
+      'msvalidate.01': 'votre-code-bing',
+    }
   },
 }
 
