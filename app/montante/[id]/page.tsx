@@ -208,7 +208,7 @@ export default function MontanteDetailPage() {
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-1 text-right">
-                {progressionObjectif.toFixed(1)}% de l'objectif
+                {progressionObjectif.toFixed(1)}% de l&apos;objectif
               </p>
             </div>
           </div>
@@ -240,18 +240,18 @@ export default function MontanteDetailPage() {
             )}
             <div>
               <dt className="text-sm text-gray-600">Nombre de paliers</dt>
-              <dd className="font-medium">{paliers.length} palier{paliers.length > 1 ? &apos;s&apos; : &apos;&apos;}</dd>
+              <dd className="font-medium">{paliers.length} palier{paliers.length > 1 ? 's' : ''}</dd>
             </div>
             <div>
               <dt className="text-sm text-gray-600">ROI (Return on Investment)</dt>
-              <dd className={`font-medium ${progressionReelle > 0 ? &apos;text-green-600&apos; : progressionReelle < 0 ? 'text-red-600' : 'text-gray-900'}`}>
+              <dd className={`font-medium ${progressionReelle > 0 ? 'text-green-600' : progressionReelle < 0 ? 'text-red-600' : 'text-gray-900'}`}>
                 {formatPourcentage(progressionReelle)}
               </dd>
             </div>
             {montante.dureeJours > 0 && (
               <div>
                 <dt className="text-sm text-gray-600">Durée</dt>
-                <dd className="font-medium">{montante.dureeJours} jour{montante.dureeJours > 1 ? &apos;s&apos; : &apos;&apos;}</dd>
+                <dd className="font-medium">{montante.dureeJours} jour{montante.dureeJours > 1 ? 's' : ''}</dd>
               </div>
             )}
           </dl>
@@ -265,7 +265,7 @@ export default function MontanteDetailPage() {
           
           {paliers.length === 0 ? (
             <p className="text-gray-500 text-center py-12">
-              Aucun palier n'a encore été ajouté à cette montante
+              Aucun palier n&apos;a encore été ajouté à cette montante
             </p>
           ) : (
             <div className="space-y-4">
