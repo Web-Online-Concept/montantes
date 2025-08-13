@@ -99,11 +99,12 @@ export const OBJECTIFS_CONFIG = {
   X10: { label: 'x10', multiplicateur: 10, couleur: '#ef4444' }
 } as const
 
-// Configuration des états (sans ARRETEE)
+// Configuration des états (avec ARRETEE ajouté)
 export const ETATS_CONFIG = {
   EN_COURS: { label: 'En cours', couleur: '#3b82f6', emoji: '⏳' },
   REUSSI: { label: 'Gagnée', couleur: '#10b981', emoji: '✅' },
-  PERDU: { label: 'Perdue', couleur: '#ef4444', emoji: '❌' }
+  PERDU: { label: 'Perdue', couleur: '#ef4444', emoji: '❌' },
+  ARRETEE: { label: 'Arrêtée', couleur: '#6b7280', emoji: '⏹️' }
 } as const
 
 // Configuration des statuts de palier
