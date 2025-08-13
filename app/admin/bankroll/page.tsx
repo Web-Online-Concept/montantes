@@ -5,6 +5,7 @@ import { formatEuro, formatPourcentage } from '@/types'
 import AdminLayout from '@/components/admin/AdminLayout'
 import TimelineBankroll from '@/components/TimelineBankroll'
 import type { HistoriqueBankroll, Montante } from '@/types'
+import type { HistoriqueBankroll, Montante } from '@/types'
 
 interface BankrollData {
   bankrollInitiale: number

@@ -486,7 +486,7 @@ export default function EditerMontantePage() {
                                 <span>{match.sport}</span>
                                 <span className="font-medium">{match.equipe1} - {match.equipe2}</span>
                                 <span className="text-gray-600">→ {match.pronostic}</span>
-                                <span className="font-medium">@ {match.cote ? match.cote.toFixed(2) : '1.00'}</span>
+                                <span className="font-medium">@ {match.cote ? match.cote.toFixed(2) : &apos;1.00&apos;}</span>
                               </div>
                               {match.statut && (
                                 <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${

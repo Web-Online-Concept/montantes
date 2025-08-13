@@ -5,6 +5,7 @@ import { formatEuro, formatPourcentage, PeriodeFiltre } from '@/types'
 import TimelineBankroll from '@/components/TimelineBankroll'
 import GraphiqueProgression from '@/components/GraphiqueProgression'
 import type { HistoriqueBankroll, Montante } from '@/types'
+import type { HistoriqueBankroll, Montante } from '@/types'
 
 export default function HistoriquePage() {
   const [historique, setHistorique] = useState<any[]>([])

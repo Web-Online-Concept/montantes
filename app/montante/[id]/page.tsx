@@ -240,18 +240,18 @@ export default function MontanteDetailPage() {
             )}
             <div>
               <dt className="text-sm text-gray-600">Nombre de paliers</dt>
-              <dd className="font-medium">{paliers.length} palier{paliers.length > 1 ? 's' : ''}</dd>
+              <dd className="font-medium">{paliers.length} palier{paliers.length > 1 ? &apos;s&apos; : &apos;&apos;}</dd>
             </div>
             <div>
               <dt className="text-sm text-gray-600">ROI (Return on Investment)</dt>
-              <dd className={`font-medium ${progressionReelle > 0 ? 'text-green-600' : progressionReelle < 0 ? 'text-red-600' : 'text-gray-900'}`}>
+              <dd className={`font-medium ${progressionReelle > 0 ? &apos;text-green-600&apos; : progressionReelle < 0 ? 'text-red-600' : 'text-gray-900'}`}>
                 {formatPourcentage(progressionReelle)}
               </dd>
             </div>
             {montante.dureeJours > 0 && (
               <div>
                 <dt className="text-sm text-gray-600">Durée</dt>
-                <dd className="font-medium">{montante.dureeJours} jour{montante.dureeJours > 1 ? 's' : ''}</dd>
+                <dd className="font-medium">{montante.dureeJours} jour{montante.dureeJours > 1 ? &apos;s&apos; : &apos;&apos;}</dd>
               </div>
             )}
           </dl>
