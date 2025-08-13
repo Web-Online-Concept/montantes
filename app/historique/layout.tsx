@@ -29,33 +29,33 @@ export const metadata: Metadata = {
   },
 }
 
-// Données structurées pour la page d'historique
-export const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FinancialProduct',
-  name: 'Historique Bankroll Montantes.pro',
-  description: 'Suivi détaillé de l\'évolution du capital dans les paris sportifs',
-  url: 'https://montantes.pro/historique',
-  provider: {
-    '@type': 'Organization',
-    name: 'Montantes.pro',
-    url: 'https://montantes.pro',
-  },
-  featureList: [
-    'Timeline détaillée des transactions',
-    'Graphiques d\'évolution',
-    'Export CSV des données',
-    'Filtres par période et type',
-    'Calcul de performance automatique',
-  ],
-  additionalType: 'http://www.productontology.org/id/Financial_accounting',
-}
-
 export default function HistoriqueLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  // Données structurées intégrées directement (sans export)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FinancialProduct',
+    name: 'Historique Bankroll Montantes.pro',
+    description: 'Suivi détaillé de l\'évolution du capital dans les paris sportifs',
+    url: 'https://montantes.pro/historique',
+    provider: {
+      '@type': 'Organization',
+      name: 'Montantes.pro',
+      url: 'https://montantes.pro',
+    },
+    featureList: [
+      'Timeline détaillée des transactions',
+      'Graphiques d\'évolution',
+      'Export CSV des données',
+      'Filtres par période et type',
+      'Calcul de performance automatique',
+    ],
+    additionalType: 'http://www.productontology.org/id/Financial_accounting',
+  }
+
   return (
     <>
       <script
