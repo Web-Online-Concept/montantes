@@ -85,8 +85,8 @@ export default function StatistiquesPage() {
     ? (stats.gainsTotaux || 0) / stats.pertesTotales 
     : (stats.gainsTotaux || 0) > 0 ? '+∞' : '0'
     
-  const evolutionBankroll = (stats.bankrollInitiale || 0) > 0 
-    ? ((stats.bilanTotal || 0) / stats.bankrollInitiale) * 100 
+  const evolutionBankroll = stats.bankrollInitiale && stats.bankrollInitiale > 0
+    ? ((stats.bilanTotal || 0) / stats.bankrollInitiale) * 100
     : 0
 
   return (
