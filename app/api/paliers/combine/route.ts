@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma, calculerProgression, verifierObjectifAtteint, mettreAJourBankroll } from '@/lib/prisma'
 import { StatutPalier } from '@prisma/client'
+import { DetailsMatchs } from '@/types'
 
 // PATCH - Mettre à jour les statuts individuels des matchs d'un combiné
 export async function PATCH(request: Request) {
@@ -52,8 +53,11 @@ export async function PATCH(request: Request) {
       )
     }
     
+    // Caster detailsMatchs pour avoir le bon type
+    const detailsMatchs = palier.detailsMatchs as unknown as DetailsMatchs
+    
     // Vérifier que c'est bien un combiné
-    if (palier.typePari !== 'COMBINE' || !palier.detailsMatchs?.matchs || palier.detailsMatchs.matchs.length < 2) {
+    if (palier.typePari !== 'COMBINE' || !detailsMatchs?.matchs || detailsMatchs.matchs.length < 2) {
       return NextResponse.json(
         { error: 'Ce palier n\'est pas un combiné' },
         { status: 400 }
@@ -61,7 +65,7 @@ export async function PATCH(request: Request) {
     }
     
     // Copier les matchs et appliquer les nouveaux statuts
-    const matchsMisAJour = [...palier.detailsMatchs.matchs]
+    const matchsMisAJour = [...detailsMatchs.matchs]
     
     for (const { matchIndex, statut } of matchsStatuts) {
       if (matchIndex >= 0 && matchIndex < matchsMisAJour.length) {
