@@ -105,7 +105,6 @@ export default function HomePage() {
                 subtitle={`Sur ${stats.nombreTotal || 0}`}
                 icon="📊"
                 color="accent"
-                compact={true}
               />
             </div>
             <div className="col-span-1">
@@ -115,7 +114,6 @@ export default function HomePage() {
                 subtitle={`ROI: ${formatPourcentage(stats.roi || 0)}`}
                 icon="📈"
                 color={stats.roi > 0 ? "success" : "warning"}
-                compact={true}
               />
             </div>
           </div>
