@@ -23,16 +23,8 @@ interface HistoriqueStats {
   }
 }
 
-interface HistoriqueItem {
-  typeOperation: string
-  variation: number
-  montantApres: number
-  createdAt: string
-  description: string
-}
-
 export default function AdminHistoriquePage() {
-  const [historique, setHistorique] = useState<HistoriqueItem[]>([])
+  const [historique, setHistorique] = useState<any[]>([])
   const [stats, setStats] = useState<HistoriqueStats | null>(null)
   const [filtreType, setFiltreType] = useState<'tout' | 'depot_retrait' | 'montantes'>('tout')
   const [periode, setPeriode] = useState<'7j' | '30j' | '90j' | 'tout'>('30j')
@@ -58,10 +50,10 @@ export default function AdminHistoriquePage() {
         const statsDetaillees: HistoriqueStats = {
           ...data.stats,
           nombreOperations: {
-            depots: data.historique.filter((h: HistoriqueItem) => h.typeOperation === 'DEPOT').length,
-            retraits: data.historique.filter((h: HistoriqueItem) => h.typeOperation === 'RETRAIT').length,
-            gains: data.historique.filter((h: HistoriqueItem) => h.typeOperation === 'GAIN_MONTANTE').length,
-            pertes: data.historique.filter((h: HistoriqueItem) => h.typeOperation === 'PERTE_MONTANTE').length
+            depots: data.historique.filter((h: any) => h.typeOperation === 'DEPOT').length,
+            retraits: data.historique.filter((h: any) => h.typeOperation === 'RETRAIT').length,
+            gains: data.historique.filter((h: any) => h.typeOperation === 'GAIN_MONTANTE').length,
+            pertes: data.historique.filter((h: any) => h.typeOperation === 'PERTE_MONTANTE').length
           }
         }
         setStats(statsDetaillees)
