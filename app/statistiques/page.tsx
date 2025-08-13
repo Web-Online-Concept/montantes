@@ -6,7 +6,6 @@ import StatsCard from '@/components/StatsCard'
 import GraphiqueProgression from '@/components/GraphiqueProgression'
 import TableauMeilleuresMontantes from '@/components/TableauMeilleuresMontantes'
 import type { HistoriqueBankroll, Montante } from '@/types'
-import type { HistoriqueBankroll, Montante } from '@/types'
 
 export default function StatistiquesPage() {
   const [stats, setStats] = useState<StatsGlobales | null>(null)
