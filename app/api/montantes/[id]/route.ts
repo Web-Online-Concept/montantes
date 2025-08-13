@@ -69,7 +69,7 @@ export async function GET(
         ...palier,
         detailsMatchs: palier.detailsMatchs as DetailsMatchs,
         progressionTotale: progressionPalier
-      }
+      } as PalierAvecInfos
     })
 
     // Transformer la montante
