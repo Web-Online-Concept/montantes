@@ -65,7 +65,7 @@ export default function MontanteDetailPage() {
     }
   }
 
-  const objectifConfig = OBJECTIFS_CONFIG[montante.objectif]
+  const objectifConfig = OBJECTIFS_CONFIG[montante.objectif as keyof typeof OBJECTIFS_CONFIG]
   
   // Calculer le gain actuel RÉEL (seulement les paliers gagnés)
   let gainActuelReel = montante.miseInitiale
