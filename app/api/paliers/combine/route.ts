@@ -147,7 +147,7 @@ export async function PATCH(request: Request) {
       data: {
         statut: statutGlobal as StatutPalier,
         cote: coteFinale, // On met à jour la cote avec la cote finale recalculée
-        detailsMatchs: { matchs: matchsMisAJour },
+        detailsMatchs: { matchs: matchsMisAJour } as any,
         gain,
         progressionTotale
       }
