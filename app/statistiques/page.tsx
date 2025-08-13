@@ -255,7 +255,7 @@ export default function StatistiquesPage() {
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Bankroll évolution</span>
               <span className="text-xl font-bold" style={{
-                color: evolutionBankroll > 0 ? &apos;#10b981&apos; : evolutionBankroll < 0 ? '#ef4444' : '#6b7280'
+                color: evolutionBankroll > 0 ? '#10b981' : evolutionBankroll < 0 ? '#ef4444' : '#6b7280'
               }}>
                 {evolutionBankroll > 0 ? '+' : ''}{evolutionBankroll.toFixed(1)}%
               </span>
