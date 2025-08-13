@@ -39,9 +39,26 @@ export default function Header() {
   return (
     <header className="bg-[#1e40af] shadow-lg sticky top-0 z-50">
       <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center">
+        <div className="flex h-16 items-center justify-between md:justify-between">
+          {/* Menu Mobile à gauche */}
+          <div className="flex md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-white hover:text-[#fbbf24] p-2"
+              aria-label="Menu"
+            >
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {isMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
+
+          {/* Logo - Centré sur mobile */}
+          <div className="flex items-center md:flex-none absolute left-1/2 transform -translate-x-1/2 md:relative md:left-auto md:transform-none">
             <Link href="/" className="flex items-center space-x-2">
               <img 
                 src="/logo.png" 
@@ -51,6 +68,9 @@ export default function Header() {
               <span className="text-white font-bold text-xl">Montantes.pro</span>
             </Link>
           </div>
+
+          {/* Espace vide à droite sur mobile pour équilibrer */}
+          <div className="w-10 md:hidden"></div>
 
           {/* Navigation Desktop */}
           <div className="hidden md:flex md:items-center md:space-x-1">
@@ -95,23 +115,6 @@ export default function Header() {
               <p className="text-xs text-[#fbbf24]">Jouer sur</p>
               <p className="text-white font-bold">Stake</p>
             </a>
-          </div>
-
-          {/* Menu Mobile */}
-          <div className="flex md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-white hover:text-[#fbbf24] p-2"
-              aria-label="Menu"
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                {isMenuOpen ? (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                ) : (
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                )}
-              </svg>
-            </button>
           </div>
         </div>
 

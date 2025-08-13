@@ -71,10 +71,11 @@ export default function HomePage() {
       {/* Hero Section */}
       <div className="bg-gradient-to-br from-blue-800 to-blue-900 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Gestion de Montantes Paris Sportifs
+          <h1 className="text-2xl md:text-5xl font-bold mb-4">
+            <span className="block md:inline">Gestion de Montantes</span>
+            <span className="block md:inline"> Paris Sportifs</span>
           </h1>
-          <p className="text-xl text-blue-100">
+          <p className="text-base md:text-xl text-blue-100">
             Suivez nos montantes avec notre système transparent et nos statistiques détaillées
           </p>
         </div>
