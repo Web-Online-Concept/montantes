@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import { MontanteAvecNumero } from '@/types'
+import { MontanteAvecNumero, PalierAvecInfos, DetailsMatchs } from '@/types'
 import { calculerProgression, verifierObjectifAtteint, mettreAJourBankroll } from '@/lib/prisma'
 
 export async function GET() {
@@ -37,12 +37,19 @@ export async function GET() {
       // Calculer la progression
       const progression = calculerProgression(montante.miseInitiale, gainActuel)
       
+      // Transformer les paliers avec le bon type
+      const paliersAvecInfos: PalierAvecInfos[] = montante.paliers.map(palier => ({
+        ...palier,
+        detailsMatchs: palier.detailsMatchs as unknown as DetailsMatchs,
+        progressionTotale: palier.progressionTotale
+      }))
+      
       return {
         ...montante,
         numeroAffichage: index + 1, // Numéro basé sur l'ordre de création
         gainActuel,
-        dernierPalier,
-        progression
+        progression,
+        paliers: paliersAvecInfos
       }
     })
     
