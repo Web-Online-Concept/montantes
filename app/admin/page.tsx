@@ -55,21 +55,18 @@ export default function AdminDashboardPage() {
 
   // Fonction pour obtenir la configuration d'état
   const getEtatConfig = (etat: string) => {
-    let config = ETATS_CONFIG[etat as keyof typeof ETATS_CONFIG]
+    const config = ETATS_CONFIG[etat as keyof typeof ETATS_CONFIG]
     
-    if (!config) {
-      if (etat === 'ARRETEE') {
-        config = ETATS_CONFIG.REUSSI
-      } else {
-        config = {
-          label: etat,
-          couleur: '#6b7280',
-          emoji: '❓'
-        }
-      }
+    if (config) {
+      return config
     }
     
-    return config
+    // Retourner un objet par défaut compatible avec le type
+    return {
+      label: 'Inconnu' as const,
+      couleur: '#6b7280' as const,
+      emoji: '⏹️' as const
+    }
   }
 
   // Fonction pour obtenir les classes CSS selon l'état
@@ -104,18 +101,18 @@ export default function AdminDashboardPage() {
         {/* Titre */}
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dashboard Administration</h1>
-          <p className="text-gray-600 mt-1">Vue d&apos;ensemble et actions rapides</p>
+          <p className="text-gray-600 mt-1">Vue d'ensemble et actions rapides</p>
         </div>
 
         {/* Stats principales */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatsCard
             title="Bankroll actuelle"
-            value={formatEuro(data.stats.bankrollActuelle)}
-            subtitle={`Disponible: ${formatEuro(data.stats.bankrollDisponible)}`}
-            variation={data.stats.bankrollInitiale > 0 
-              ? ((data.stats.bankrollActuelle - data.stats.bankrollInitiale) / data.stats.bankrollInitiale) * 100
-              : data.stats.bankrollActuelle > 0 ? 100 : 0}
+            value={formatEuro(data.stats.bankrollActuelle || 0)}
+            subtitle={`Disponible: ${formatEuro(data.stats.bankrollDisponible || 0)}`}
+            variation={data.stats.bankrollInitiale && data.stats.bankrollInitiale > 0 
+              ? ((data.stats.bankrollActuelle || 0) - data.stats.bankrollInitiale) / data.stats.bankrollInitiale * 100
+              : data.stats.bankrollActuelle && data.stats.bankrollActuelle > 0 ? 100 : 0}
             icon="💰"
             color="primary"
           />
