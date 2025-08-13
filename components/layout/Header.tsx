@@ -95,18 +95,6 @@ export default function Header() {
               <p className="text-xs text-[#fbbf24]">Jouer sur</p>
               <p className="text-white font-bold">Stake</p>
             </a>
-          </div>-white font-bold">{formatEuro(bankroll)}</p>
-              </div>
-            )}
-            <a
-              href="https://rounders.pro/jouer-sur-stake"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg hover:bg-white/20 transition-colors text-center"
-            >
-              <p className="text-xs text-[#fbbf24]">Jouer sur</p>
-              <p className="text-white font-bold">Stake</p>
-            </a>
           </div>
 
           {/* Menu Mobile */}
