@@ -75,7 +75,7 @@ export default function HomePage() {
             <span className="block md:inline">Gestion de Montantes</span>
             <span className="block md:inline"> Paris Sportifs</span>
           </h1>
-          <p className="text-base md:text-xl text-blue-100">
+          <p className="text-base md:text-xl text-blue-100 mb-4 md:mb-0">
             Suivez nos montantes avec notre système transparent et nos statistiques détaillées
           </p>
         </div>
@@ -181,8 +181,8 @@ export default function HomePage() {
       </div>
 
       {/* CTA Telegram */}
-      <div className="bg-blue-900 text-white py-0 md:py-12">
-        <div className="max-w-4xl mx-auto px-4 text-center pb-8 md:pb-0 pt-8 md:pt-0">
+      <div className="bg-blue-900 text-white pt-8 pb-0 md:py-12">
+        <div className="max-w-4xl mx-auto px-4 text-center pb-8 md:pb-0">
           <h2 className="text-2xl font-bold mb-4">
             Suivez nos montantes en direct sur Telegram
           </h2>

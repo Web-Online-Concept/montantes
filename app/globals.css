@@ -222,9 +222,13 @@ body {
   background: #1e3a8a;
 }
 
-/* Focus styles accessibilité */
-a:focus,
-button:focus,
+/* Suppression des focus styles sur les liens */
+a:focus {
+  outline: none;
+}
+
+/* Focus styles seulement pour les éléments de formulaire */
+button:focus-visible,
 input:focus,
 select:focus,
 textarea:focus {
