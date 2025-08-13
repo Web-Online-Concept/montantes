@@ -6,7 +6,6 @@ import { MontanteAvecNumero, FiltreMontante, TriMontante, formatEuro, formatPour
 import CarteMontante from '@/components/CarteMontante'
 import StatsCard from '@/components/StatsCard'
 import type { HistoriqueBankroll, Montante } from '@/types'
-import type { HistoriqueBankroll, Montante } from '@/types'
 
 export default function HomePage() {
   const [montantes, setMontantes] = useState<MontanteAvecNumero[]>([])
