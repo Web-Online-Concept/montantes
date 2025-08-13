@@ -449,7 +449,7 @@ export default function EditerMontantePage() {
                           palier.statut === 'ANNULE' ? 'bg-gray-100 text-gray-800' :
                           'bg-yellow-100 text-yellow-800'
                         }`}>
-                          {palier.statut === 'GAGNE' ? '✓ Gagné' :
+                          {palier.statut === 'GAGNE' ? '✔ Gagné' :
                            palier.statut === 'PERDU' ? '✗ Perdu' :
                            palier.statut === 'ANNULE' ? '↺ Annulé' :
                            '⏳ En attente'}
@@ -488,19 +488,39 @@ export default function EditerMontantePage() {
                                 <span className="text-gray-600">→ {match.pronostic}</span>
                                 <span className="font-medium">@ {match.cote ? match.cote.toFixed(2) : '1.00'}</span>
                               </div>
-                              {match.statut && (
-                                <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
-                                  match.statut === 'GAGNE' ? 'bg-green-100 text-green-800' :
-                                  match.statut === 'PERDU' ? 'bg-red-100 text-red-800' :
-                                  match.statut === 'ANNULE' ? 'bg-gray-100 text-gray-800' :
+                              {/* Affichage du statut du match */}
+                              <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${
+                                // Si le palier est validé, on affiche son statut pour tous les matchs
+                                palier.statut !== 'EN_ATTENTE' ? (
+                                  palier.statut === 'GAGNE' ? 'bg-green-100 text-green-800' :
+                                  palier.statut === 'PERDU' ? 'bg-red-100 text-red-800' :
+                                  palier.statut === 'ANNULE' ? 'bg-gray-100 text-gray-800' :
                                   'bg-yellow-100 text-yellow-800'
-                                }`}>
-                                  {match.statut === 'GAGNE' ? '✓ Gagné' :
-                                   match.statut === 'PERDU' ? '✗ Perdu' :
-                                   match.statut === 'ANNULE' ? '↺ Annulé' :
-                                   '⏳ En attente'}
-                                </span>
-                              )}
+                                ) : (
+                                  // Si le palier est en attente et qu'il y a un statut spécifique au match
+                                  match.statut ? (
+                                    match.statut === 'GAGNE' ? 'bg-green-100 text-green-800' :
+                                    match.statut === 'PERDU' ? 'bg-red-100 text-red-800' :
+                                    match.statut === 'ANNULE' ? 'bg-gray-100 text-gray-800' :
+                                    'bg-yellow-100 text-yellow-800'
+                                  ) : 'bg-yellow-100 text-yellow-800'
+                                )
+                              }`}>
+                                {/* Affichage du texte du statut */}
+                                {palier.statut !== 'EN_ATTENTE' ? (
+                                  palier.statut === 'GAGNE' ? '✔ Gagné' :
+                                  palier.statut === 'PERDU' ? '✗ Perdu' :
+                                  palier.statut === 'ANNULE' ? '↺ Annulé' :
+                                  '⏳ En attente'
+                                ) : (
+                                  match.statut ? (
+                                    match.statut === 'GAGNE' ? '✔ Gagné' :
+                                    match.statut === 'PERDU' ? '✗ Perdu' :
+                                    match.statut === 'ANNULE' ? '↺ Annulé' :
+                                    '⏳ En attente'
+                                  ) : '⏳ En attente'
+                                )}
+                              </span>
                             </div>
                           ))}
                         </div>
@@ -529,7 +549,7 @@ export default function EditerMontantePage() {
                                 className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700 disabled:opacity-50 transition-colors"
                                 title="Valider comme gagné"
                               >
-                                {updatingPalier === palier.id ? '...' : '✓ Gagné'}
+                                {updatingPalier === palier.id ? '...' : '✔ Gagné'}
                               </button>
                               <button
                                 onClick={() => handleUpdatePalierStatut(palier.id, 'ANNULE')}
