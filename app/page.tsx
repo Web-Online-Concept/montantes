@@ -69,7 +69,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-blue-800 to-blue-900 text-white py-16">
+      <div className="bg-gradient-to-br from-blue-800 to-blue-900 text-white py-8 md:py-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-2xl md:text-5xl font-bold mb-4">
             <span className="block md:inline">Gestion de Montantes</span>
@@ -181,8 +181,8 @@ export default function HomePage() {
       </div>
 
       {/* CTA Telegram */}
-      <div className="bg-blue-900 text-white py-12">
-        <div className="max-w-4xl mx-auto px-4 text-center">
+      <div className="bg-blue-900 text-white py-0 md:py-12">
+        <div className="max-w-4xl mx-auto px-4 text-center pb-8 md:pb-0 pt-8 md:pt-0">
           <h2 className="text-2xl font-bold mb-4">
             Suivez nos montantes en direct sur Telegram
           </h2>
