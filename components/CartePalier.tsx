@@ -6,7 +6,7 @@ interface CartePalierProps {
 }
 
 export default function CartePalier({ palier, montante }: CartePalierProps) {
-  const statutConfig = STATUTS_PALIER_CONFIG[palier.statut]
+  const statutConfig = STATUTS_PALIER_CONFIG[palier.statut as keyof typeof STATUTS_PALIER_CONFIG]
   const detailsMatchs = palier.detailsMatchs as DetailsMatchs
   
   // Fonction pour obtenir l'icône du sport
