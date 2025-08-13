@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       data: {
         montantAvant: settings.bankrollActuelle,
         montantApres: settings.bankrollActuelle + difference,
-        variation: difference,
+        montant: difference,
         typeOperation: difference > 0 ? 'DEPOT' : 'RETRAIT',
         description: `Ajustement de la bankroll initiale (${settings.bankrollInitiale}€ → ${montant}€)`
       }
