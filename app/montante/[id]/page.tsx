@@ -58,7 +58,7 @@ export default function MontanteDetailPage() {
     } else {
       // Fallback par défaut
       etatConfig = {
-        label: montante.etat,
+        label: montante.etat as any,
         couleur: '#6b7280',
         emoji: '⏹️' as const
       }
