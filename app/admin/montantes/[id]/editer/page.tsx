@@ -224,7 +224,7 @@ export default function EditerMontantePage() {
   if (!montante) return null
 
   const etatConfig = ETATS_CONFIG[montante.etat as EtatMontante]
-  const objectifConfig = OBJECTIFS_CONFIG[montante.objectif]
+  const objectifConfig = OBJECTIFS_CONFIG[montante.objectif as keyof typeof OBJECTIFS_CONFIG]
 
   return (
     <AdminLayout>
