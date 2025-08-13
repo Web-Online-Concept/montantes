@@ -5,9 +5,10 @@ import { calculerProgression } from '@/lib/prisma'
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const { id } = params
 
     // Récupérer la montante avec ses paliers
@@ -95,9 +96,10 @@ export async function GET(
 // DELETE pour supprimer une montante
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const { id } = params
 
     // Vérifier que la montante existe
@@ -158,9 +160,10 @@ export async function DELETE(
 // PUT pour modifier une montante
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const { id } = params
     const body = await request.json()
     const { nom, objectif } = body
