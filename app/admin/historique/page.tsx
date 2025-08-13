@@ -6,7 +6,6 @@ import AdminLayout from '@/components/admin/AdminLayout'
 import TimelineBankroll from '@/components/TimelineBankroll'
 import GraphiqueProgression from '@/components/GraphiqueProgression'
 import type { HistoriqueBankroll, Montante } from '@/types'
-import type { HistoriqueBankroll, Montante } from '@/types'
 
 interface HistoriqueStats {
   totalDepots: number
