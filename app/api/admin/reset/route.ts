@@ -10,9 +10,18 @@ export async function POST() {
       prisma.montante.deleteMany(),
     ])
     
-    // Récupérer la bankroll initiale des settings
+    // Réinitialiser les settings (bankroll)
     const settings = await prisma.settings.findFirst()
-    // La variable bankrollInitiale n'est pas utilisée car on ne réinitialise pas les settings
+    if (settings) {
+      await prisma.settings.update({
+        where: { id: settings.id },
+        data: {
+          bankrollActuelle: 0,
+          bankrollInitiale: 0,
+          bankrollDisponible: 0
+        }
+      })
+    }
     
     return NextResponse.json({ 
       message: 'Base de données réinitialisée avec succès',
