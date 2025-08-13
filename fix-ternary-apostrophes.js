@@ -6,7 +6,8 @@ const filesToFix = {
   'components/CarteMontante.tsx': [97],
   'app/admin/montantes/[id]/editer/page.tsx': [489],
   'app/montante/[id]/page.tsx': [243],
-  'app/statistiques/page.tsx': [258]
+  'app/statistiques/page.tsx': [258],
+  'components/admin/ValidationMatchsCombine.tsx': [120]
 };
 
 function fixFile(filePath, lineNumbers) {
