@@ -24,7 +24,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
       etatConfig = {
         label: montante.etat,
         couleur: '#6b7280',
-        emoji: '❓'
+        emoji: '⏹️' as const
       }
     }
   }
