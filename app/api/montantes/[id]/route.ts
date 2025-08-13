@@ -67,7 +67,7 @@ export async function GET(
 
       return {
         ...palier,
-        detailsMatchs: palier.detailsMatchs as DetailsMatchs,
+        detailsMatchs: palier.detailsMatchs as unknown as DetailsMatchs,
         progressionTotale: progressionPalier
       } as PalierAvecInfos
     })
