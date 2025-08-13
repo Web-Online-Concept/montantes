@@ -110,7 +110,7 @@ export const ETATS_CONFIG = {
 // Configuration des statuts de palier
 export const STATUTS_PALIER_CONFIG = {
   EN_ATTENTE: { label: 'En attente', couleur: '#fbbf24', emoji: '⏳' },
-  GAGNE: { label: 'Gagné', couleur: '#10b981', emoji: '✓' },
+  GAGNE: { label: 'Gagné', couleur: '#10b981', emoji: '✔' },
   PERDU: { label: 'Perdu', couleur: '#ef4444', emoji: '✗' },
   ANNULE: { label: 'Annulé', couleur: '#6b7280', emoji: '↺' }
 } as const
@@ -118,7 +118,7 @@ export const STATUTS_PALIER_CONFIG = {
 // Configuration des statuts de match (pour les combinés)
 export const STATUTS_MATCH_CONFIG = {
   EN_ATTENTE: { label: 'En attente', couleur: '#fbbf24', emoji: '⏳' },
-  GAGNE: { label: 'Gagné', couleur: '#10b981', emoji: '✓' },
+  GAGNE: { label: 'Gagné', couleur: '#10b981', emoji: '✔' },
   PERDU: { label: 'Perdu', couleur: '#ef4444', emoji: '✗' },
   ANNULE: { label: 'Annulé', couleur: '#6b7280', emoji: '↺' }
 } as const
@@ -129,6 +129,7 @@ export interface StatsGlobales {
   enCours: number
   reussies: number
   perdues: number
+  arretees: number  // AJOUT de la propriété manquante
   tauxReussite: number
   roi: number
   gainsTotaux: number
