@@ -29,7 +29,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
     }
   }
   
-  const objectifConfig = OBJECTIFS_CONFIG[montante.objectif]
+  const objectifConfig = OBJECTIFS_CONFIG[montante.objectif as keyof typeof OBJECTIFS_CONFIG]
   
   // Calculer le gain à afficher (actuel ou final selon l'état)
   const isTerminee = montante.etat === 'REUSSI' || montante.etat === 'PERDU' || montante.etat === 'ARRETEE'
