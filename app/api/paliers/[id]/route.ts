@@ -4,9 +4,10 @@ import { calculerProgression } from '@/lib/prisma'
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const { id } = params
 
     // Récupérer le palier avec sa montante et tous les paliers
@@ -103,9 +104,10 @@ export async function DELETE(
 // GET pour récupérer un palier spécifique
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const { id } = params
 
     const palier = await prisma.palier.findUnique({
@@ -136,9 +138,10 @@ export async function GET(
 // PUT pour mettre à jour complètement un palier
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params
     const { id } = params
     const body = await request.json()
     const { cote, typePari, detailsMatchs, dateMatch } = body
