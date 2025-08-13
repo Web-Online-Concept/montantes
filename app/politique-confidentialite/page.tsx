@@ -61,11 +61,11 @@ export default function PolitiqueConfidentialitePage() {
                 Nous collectons plusieurs types de données pour fournir et améliorer notre Service :
               </p>
 
-              <h3 className="text-lg font-semibold text-blue-700">2.1 Données d'identification</h3>
+              <h3 className="text-lg font-semibold text-blue-700">2.1 Données d&apos;identification</h3>
               <ul className="list-disc ml-6 space-y-2">
                 <li>Nom et prénom</li>
                 <li>Adresse email</li>
-                <li>Nom d'utilisateur (pseudonyme)</li>
+                <li>Nom d&apos;utilisateur (pseudonyme)</li>
               </ul>
 
               <h3 className="text-lg font-semibold text-blue-700 mt-4">2.2 Données de connexion</h3>
@@ -76,18 +76,18 @@ export default function PolitiqueConfidentialitePage() {
                 <li>Type et version du navigateur</li>
               </ul>
 
-              <h3 className="text-lg font-semibold text-blue-700 mt-4">2.3 Données d'utilisation</h3>
+              <h3 className="text-lg font-semibold text-blue-700 mt-4">2.3 Données d&apos;utilisation</h3>
               <ul className="list-disc ml-6 space-y-2">
                 <li>Pages visitées et fonctionnalités utilisées</li>
                 <li>Données relatives aux montantes créées</li>
                 <li>Statistiques de performance</li>
-                <li>Préférences d'affichage</li>
+                <li>Préférences d&apos;affichage</li>
               </ul>
 
               <h3 className="text-lg font-semibold text-blue-700 mt-4">2.4 Données techniques</h3>
               <ul className="list-disc ml-6 space-y-2">
-                <li>Système d'exploitation</li>
-                <li>Résolution d'écran</li>
+                <li>Système d&apos;exploitation</li>
+                <li>Résolution d&apos;écran</li>
                 <li>Langue du navigateur</li>
                 <li>Données de cookies (voir section dédiée)</li>
               </ul>
@@ -109,7 +109,7 @@ export default function PolitiqueConfidentialitePage() {
               <p>Pour :</p>
               <ul className="list-disc ml-6 space-y-2">
                 <li>Créer et gérer votre compte utilisateur</li>
-                <li>Fournir l'accès aux fonctionnalités du Service</li>
+                <li>Fournir l&apos;accès aux fonctionnalités du Service</li>
                 <li>Sauvegarder vos montantes et préférences</li>
                 <li>Assurer le support technique</li>
               </ul>
@@ -165,7 +165,7 @@ export default function PolitiqueConfidentialitePage() {
                   <strong>Données comptables :</strong> 10 ans conformément aux obligations légales
                 </li>
                 <li>
-                  <strong>Données relatives aux demandes d'exercice de droits :</strong> 5 ans à compter 
+                  <strong>Données relatives aux demandes d&apos;exercice de droits :</strong> 5 ans à compter 
                   de la demande
                 </li>
               </ul>
@@ -240,7 +240,7 @@ export default function PolitiqueConfidentialitePage() {
                 <li>Connexion sécurisée HTTPS pour toutes les pages du site</li>
                 <li>Authentification à deux facteurs disponible</li>
                 <li>Sauvegardes régulières et sécurisées</li>
-                <li>Contrôle d'accès strict aux données</li>
+                <li>Contrôle d&apos;accès strict aux données</li>
                 <li>Formation du personnel à la protection des données</li>
                 <li>Tests de sécurité réguliers</li>
               </ul>
@@ -261,7 +261,7 @@ export default function PolitiqueConfidentialitePage() {
                 Conformément au RGPD, vous disposez des droits suivants concernant vos données personnelles :
               </p>
 
-              <h3 className="text-lg font-semibold text-blue-700">8.1 Droit d'accès</h3>
+              <h3 className="text-lg font-semibold text-blue-700">8.1 Droit d&apos;accès</h3>
               <p>
                 Vous pouvez obtenir la confirmation que des données vous concernant sont traitées et 
                 demander une copie de ces données.
@@ -272,7 +272,7 @@ export default function PolitiqueConfidentialitePage() {
                 Vous pouvez demander la rectification de vos données si elles sont inexactes ou incomplètes.
               </p>
 
-              <h3 className="text-lg font-semibold text-blue-700 mt-4">8.3 Droit à l'effacement ("droit à l'oubli")</h3>
+              <h3 className="text-lg font-semibold text-blue-700 mt-4">8.3 Droit à l&apos;effacement (&quot;droit à l&apos;oubli&quot;)</h3>
               <p>
                 Vous pouvez demander l'effacement de vos données dans certains cas prévus par le RGPD.
               </p>
@@ -288,7 +288,7 @@ export default function PolitiqueConfidentialitePage() {
                 responsable de traitement.
               </p>
 
-              <h3 className="text-lg font-semibold text-blue-700 mt-4">8.6 Droit d'opposition</h3>
+              <h3 className="text-lg font-semibold text-blue-700 mt-4">8.6 Droit d&apos;opposition</h3>
               <p>
                 Vous pouvez vous opposer au traitement de vos données pour des raisons tenant à votre 
                 situation particulière.
@@ -322,7 +322,7 @@ export default function PolitiqueConfidentialitePage() {
               9. Cookies et technologies similaires
             </h2>
             <div className="space-y-4 text-gray-700">
-              <h3 className="text-lg font-semibold text-blue-700">9.1 Qu'est-ce qu'un cookie ?</h3>
+              <h3 className="text-lg font-semibold text-blue-700">9.1 Qu&apos;est-ce qu&apos;un cookie ?</h3>
               <p>
                 Un cookie est un petit fichier texte déposé sur votre appareil lors de la visite d'un site web.
               </p>
@@ -343,15 +343,15 @@ export default function PolitiqueConfidentialitePage() {
                 <div>
                   <p className="font-semibold">Cookies de fonctionnalité</p>
                   <ul className="list-disc ml-6 space-y-1">
-                    <li>Mémorisation de vos préférences d'affichage</li>
-                    <li>Personnalisation de l'interface</li>
+                    <li>Mémorisation de vos préférences d&apos;affichage</li>
+                    <li>Personnalisation de l&apos;interface</li>
                   </ul>
                 </div>
 
                 <div>
                   <p className="font-semibold">Cookies analytiques (soumis à consentement)</p>
                   <ul className="list-disc ml-6 space-y-1">
-                    <li>Analyse de l'utilisation du site</li>
+                    <li>Analyse de l&apos;utilisation du site</li>
                     <li>Amélioration des performances</li>
                   </ul>
                 </div>
@@ -436,7 +436,7 @@ export default function PolitiqueConfidentialitePage() {
                 du RGPD, vous avez le droit d'introduire une réclamation auprès de la CNIL :
               </p>
               <div className="ml-4 mt-2 p-4 bg-gray-50 rounded-lg">
-                <p className="font-semibold">Commission Nationale de l'Informatique et des Libertés (CNIL)</p>
+                <p className="font-semibold">Commission Nationale de l&apos;Informatique et des Libertés (CNIL)</p>
                 <p>3 Place de Fontenoy - TSA 80715</p>
                 <p>75334 PARIS CEDEX 07</p>
                 <p>Téléphone : 01 53 73 22 22</p>

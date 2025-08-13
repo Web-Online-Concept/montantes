@@ -184,7 +184,7 @@ export default function NouvelleMontantePage() {
             <h3 className="font-semibold text-blue-900 mb-2">Informations importantes</h3>
             <ul className="text-sm text-blue-700 space-y-1">
               <li>• La montante sera automatiquement nommée selon son ordre de création</li>
-              <li>• La montante sera créée avec l'état "En cours"</li>
+              <li>• La montante sera créée avec l&apos;état &quot;En cours&quot;</li>
               <li>• Vous pourrez ajouter des paliers après la création</li>
               <li>• La mise initiale sera déduite de la bankroll disponible</li>
               <li>• Recommandation : ne pas dépasser {VALIDATION.BANKROLL_POURCENTAGE_MAX}% de votre bankroll</li>

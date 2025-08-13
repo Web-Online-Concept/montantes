@@ -104,7 +104,7 @@ export default function AdminDashboardPage() {
         {/* Titre */}
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dashboard Administration</h1>
-          <p className="text-gray-600 mt-1">Vue d'ensemble et actions rapides</p>
+          <p className="text-gray-600 mt-1">Vue d&apos;ensemble et actions rapides</p>
         </div>
 
         {/* Stats principales */}

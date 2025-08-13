@@ -110,14 +110,14 @@ export default function MentionsLegalesPage() {
                 et à la loi "Informatique et Libertés" du 6 janvier 1978 modifiée, vous disposez des droits suivants :
               </p>
               <ul className="list-disc ml-6 space-y-2">
-                <li>Droit d'accès à vos données personnelles</li>
+                <li>Droit d&apos;accès à vos données personnelles</li>
                 <li>Droit de rectification des données inexactes</li>
-                <li>Droit à l'effacement ("droit à l'oubli")</li>
+                <li>Droit à l&apos;effacement (&quot;droit à l&apos;oubli&quot;)</li>
                 <li>Droit à la limitation du traitement</li>
                 <li>Droit à la portabilité des données</li>
-                <li>Droit d'opposition au traitement</li>
+                <li>Droit d&apos;opposition au traitement</li>
                 <li>Droit de retirer votre consentement à tout moment</li>
-                <li>Droit d'introduire une réclamation auprès de la CNIL</li>
+                <li>Droit d&apos;introduire une réclamation auprès de la CNIL</li>
               </ul>
               <p>
                 Pour exercer ces droits ou pour toute question sur le traitement de vos données dans ce dispositif, 
@@ -132,7 +132,7 @@ export default function MentionsLegalesPage() {
                 adresser une réclamation à la CNIL :
               </p>
               <div className="ml-4 mt-2">
-                <p>Commission Nationale de l'Informatique et des Libertés</p>
+                <p>Commission Nationale de l&apos;Informatique et des Libertés</p>
                 <p>3 Place de Fontenoy - TSA 80715</p>
                 <p>75334 PARIS CEDEX 07</p>
                 <p>Site web : <a href="https://www.cnil.fr" className="text-blue-600 hover:underline" target="_blank" rel="noopener noreferrer">www.cnil.fr</a></p>
@@ -182,10 +182,10 @@ export default function MentionsLegalesPage() {
                 Web Online Concept décline toute responsabilité quant à :
               </p>
               <ul className="list-disc ml-6 space-y-2">
-                <li>L'utilisation qui pourrait être faite des informations et contenus présents sur le site</li>
-                <li>L'impossibilité d'utiliser le site</li>
+                <li>L&apos;utilisation qui pourrait être faite des informations et contenus présents sur le site</li>
+                <li>L&apos;impossibilité d&apos;utiliser le site</li>
                 <li>Les éventuels problèmes techniques rencontrés</li>
-                <li>Les dommages directs ou indirects résultant de l'utilisation du site</li>
+                <li>Les dommages directs ou indirects résultant de l&apos;utilisation du site</li>
               </ul>
               <p>
                 L'utilisateur est seul responsable de l'utilisation qu'il fait des contenus et informations 

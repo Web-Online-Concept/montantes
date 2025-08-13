@@ -244,7 +244,7 @@ export default function AdminSettingsPage() {
         {/* En-tête */}
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Paramètres</h1>
-          <p className="text-gray-600 mt-1">Gérez les paramètres de l'application et votre compte admin</p>
+          <p className="text-gray-600 mt-1">Gérez les paramètres de l&apos;application et votre compte admin</p>
         </div>
 
         {/* Informations du compte */}
@@ -409,7 +409,7 @@ export default function AdminSettingsPage() {
 
         {/* Paramètres de l'application */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Paramètres de l'application</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Paramètres de l&apos;application</h2>
           
           <form onSubmit={handleBankrollSubmit} className="space-y-4">
             <div>
@@ -476,7 +476,7 @@ export default function AdminSettingsPage() {
           <h3 className="font-medium text-gray-900 mb-4">Informations système</h3>
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between">
-              <dt className="text-gray-600">Version de l'application</dt>
+              <dt className="text-gray-600">Version de l&apos;application</dt>
               <dd className="font-medium">1.0.0</dd>
             </div>
             <div className="flex justify-between">

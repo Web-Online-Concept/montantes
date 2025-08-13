@@ -5,6 +5,7 @@ import { formatEuro } from '@/types'
 import AdminLayout from '@/components/admin/AdminLayout'
 import TimelineBankroll from '@/components/TimelineBankroll'
 import GraphiqueProgression from '@/components/GraphiqueProgression'
+import type { HistoriqueBankroll, Montante } from '@/types'
 
 interface HistoriqueStats {
   totalDepots: number
@@ -49,10 +50,10 @@ export default function AdminHistoriquePage() {
         const statsDetaillees: HistoriqueStats = {
           ...data.stats,
           nombreOperations: {
-            depots: data.historique.filter((h: any) => h.typeOperation === 'DEPOT').length,
-            retraits: data.historique.filter((h: any) => h.typeOperation === 'RETRAIT').length,
-            gains: data.historique.filter((h: any) => h.typeOperation === 'GAIN_MONTANTE').length,
-            pertes: data.historique.filter((h: any) => h.typeOperation === 'PERTE_MONTANTE').length
+            depots: data.historique.filter((h: { bankrollInitiale: number; bankrollActuelle: number; variationTotale: number; totalDepots: number; totalRetraits: number; totalGains: number; totalPertes: number }) => h.typeOperation === 'DEPOT').length,
+            retraits: data.historique.filter((h: { bankrollInitiale: number; bankrollActuelle: number; variationTotale: number; totalDepots: number; totalRetraits: number; totalGains: number; totalPertes: number }) => h.typeOperation === 'RETRAIT').length,
+            gains: data.historique.filter((h: { bankrollInitiale: number; bankrollActuelle: number; variationTotale: number; totalDepots: number; totalRetraits: number; totalGains: number; totalPertes: number }) => h.typeOperation === 'GAIN_MONTANTE').length,
+            pertes: data.historique.filter((h: { bankrollInitiale: number; bankrollActuelle: number; variationTotale: number; totalDepots: number; totalRetraits: number; totalGains: number; totalPertes: number }) => h.typeOperation === 'PERTE_MONTANTE').length
           }
         }
         setStats(statsDetaillees)
@@ -237,7 +238,7 @@ export default function AdminHistoriquePage() {
               <option value="7j">7 derniers jours</option>
               <option value="30j">30 derniers jours</option>
               <option value="90j">90 derniers jours</option>
-              <option value="tout">Tout l'historique</option>
+              <option value="tout">Tout l&apos;historique</option>
             </select>
           </div>
         </div>
@@ -266,7 +267,7 @@ export default function AdminHistoriquePage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b-2 border-gray-200">
-                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Type d'opération</th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">Type d&apos;opération</th>
                     <th className="text-center py-3 px-4 font-semibold text-gray-700">Nombre</th>
                     <th className="text-right py-3 px-4 font-semibold text-gray-700">Total</th>
                     <th className="text-right py-3 px-4 font-semibold text-gray-700">Moyenne</th>

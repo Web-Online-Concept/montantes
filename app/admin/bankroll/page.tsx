@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { formatEuro, formatPourcentage } from '@/types'
 import AdminLayout from '@/components/admin/AdminLayout'
 import TimelineBankroll from '@/components/TimelineBankroll'
+import type { HistoriqueBankroll, Montante } from '@/types'
 
 interface BankrollData {
   bankrollInitiale: number
@@ -147,7 +148,7 @@ export default function AdminBankrollPage() {
 
         {/* Vue d'ensemble */}
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-6">Vue d'ensemble</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-6">Vue d&apos;ensemble</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Bankroll initiale */}

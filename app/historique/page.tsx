@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { formatEuro, formatPourcentage, PeriodeFiltre } from '@/types'
 import TimelineBankroll from '@/components/TimelineBankroll'
 import GraphiqueProgression from '@/components/GraphiqueProgression'
+import type { HistoriqueBankroll, Montante } from '@/types'
 
 export default function HistoriquePage() {
   const [historique, setHistorique] = useState<any[]>([])
@@ -79,7 +80,7 @@ export default function HistoriquePage() {
         {/* En-tête */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Historique Bankroll</h1>
-          <p className="text-gray-600 mt-2">Suivez l'évolution détaillée de votre capital</p>
+          <p className="text-gray-600 mt-2">Suivez l&apos;évolution détaillée de votre capital</p>
         </div>
 
         {/* Résumé */}

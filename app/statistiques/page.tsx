@@ -5,6 +5,7 @@ import { StatsGlobales, formatEuro, formatPourcentage } from '@/types'
 import StatsCard from '@/components/StatsCard'
 import GraphiqueProgression from '@/components/GraphiqueProgression'
 import TableauMeilleuresMontantes from '@/components/TableauMeilleuresMontantes'
+import type { HistoriqueBankroll, Montante } from '@/types'
 
 export default function StatistiquesPage() {
   const [stats, setStats] = useState<StatsGlobales | null>(null)
@@ -93,7 +94,7 @@ export default function StatistiquesPage() {
       {/* Titre */}
       <section>
         <h1 className="text-4xl font-black text-[#1e40af] mb-2">Statistiques</h1>
-        <p className="text-gray-600">Vue d'ensemble des performances et analyses détaillées</p>
+        <p className="text-gray-600">Vue d&apos;ensemble des performances et analyses détaillées</p>
       </section>
 
       {/* Sélecteur de période */}
@@ -253,7 +254,7 @@ export default function StatistiquesPage() {
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Bankroll évolution</span>
               <span className="text-xl font-bold" style={{
-                color: evolutionBankroll > 0 ? '#10b981' : evolutionBankroll < 0 ? '#ef4444' : '#6b7280'
+                color: evolutionBankroll > 0 ? &apos;#10b981&apos; : evolutionBankroll < 0 ? '#ef4444' : '#6b7280'
               }}>
                 {evolutionBankroll > 0 ? '+' : ''}{evolutionBankroll.toFixed(1)}%
               </span>

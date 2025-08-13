@@ -94,7 +94,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
           <div>
             <div className="flex justify-between items-center mb-2">
               <span className="text-sm text-gray-600">Progression</span>
-              <span className={`font-semibold ${progressionReelle > 0 ? 'text-green-600' : progressionReelle < 0 ? 'text-red-600' : 'text-gray-600'}`}>
+              <span className={`font-semibold ${progressionReelle > 0 ? &apos;text-green-600&apos; : progressionReelle < 0 ? 'text-red-600' : 'text-gray-600'}`}>
                 {formatPourcentage(progressionReelle)}
               </span>
             </div>
@@ -127,7 +127,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
               <p className="text-xs text-gray-500">
                 {isTerminee ? 'Gain final' : 'Gain actuel'}
               </p>
-              <p className={`font-semibold ${gainAffiche > montante.miseInitiale ? 'text-green-600' : gainAffiche < montante.miseInitiale ? 'text-red-600' : 'text-gray-600'}`}>
+              <p className={`font-semibold ${gainAffiche > montante.miseInitiale ? &apos;text-green-600&apos; : gainAffiche < montante.miseInitiale ? 'text-red-600' : 'text-gray-600'}`}>
                 {formatEuro(gainAffiche)}
               </p>
             </div>

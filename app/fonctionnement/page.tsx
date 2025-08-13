@@ -97,10 +97,10 @@ export default function FonctionnementPage() {
 
         {/* Qu'est-ce qu'une montante */}
         <section className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-[#1e40af] mb-6">Qu'est-ce qu'une montante ?</h2>
+          <h2 className="text-2xl font-bold text-[#1e40af] mb-6">Qu&apos;est-ce qu&apos;une montante ?</h2>
           <div className="prose prose-lg text-gray-700">
             <p>
-              Une montante est une méthode qui consiste à utiliser <strong>l'intégralité des gains réalisés</strong> sur un pari 
+              Une montante est une méthode qui consiste à utiliser <strong>l&apos;intégralité des gains réalisés</strong> sur un pari 
               (mise initiale incluse) comme mise pour le pari suivant. On répète ce processus à chaque palier jusqu'à 
               atteindre l'objectif de gain fixé. C'est une technique qui permet de multiplier rapidement sa mise initiale, 
               mais qui nécessite de remporter tous les paris consécutifs.
@@ -127,7 +127,7 @@ export default function FonctionnementPage() {
                 <div className="w-12 h-12 bg-[#fbbf24] rounded-full flex items-center justify-center text-[#1e40af] font-bold text-xl">
                   1
                 </div>
-                <h3 className="ml-3 font-semibold text-lg">Définition de l'objectif</h3>
+                <h3 className="ml-3 font-semibold text-lg">Définition de l&apos;objectif</h3>
               </div>
               <p className="text-gray-700">
                 Chaque montante commence avec une mise initiale et un objectif multiplicateur (x2, x3, x5 ou x10). 
@@ -181,7 +181,7 @@ export default function FonctionnementPage() {
 
         {/* Exemple pratique */}
         <section className="bg-white rounded-xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-[#1e40af] mb-6">Exemple pratique d'une montante</h2>
+          <h2 className="text-2xl font-bold text-[#1e40af] mb-6">Exemple pratique d&apos;une montante</h2>
           
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -299,7 +299,7 @@ export default function FonctionnementPage() {
               </svg>
               <div>
                 <h3 className="font-semibold mb-1">Analyse approfondie</h3>
-                <p className="text-blue-100">Chaque pari est analysé pendant plusieurs heures avant d'être sélectionné.</p>
+                <p className="text-blue-100">Chaque pari est analysé pendant plusieurs heures avant d&apos;être sélectionné.</p>
               </div>
             </div>
 
