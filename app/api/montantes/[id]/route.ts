@@ -54,14 +54,6 @@ export async function GET(
     // Calculer la progression actuelle
     const progression = calculerProgression(montante.miseInitiale, gainActuel)
 
-    // Transformer la montante
-    const montanteAvecNumero: MontanteAvecNumero = {
-      ...montante,
-      numeroAffichage,
-      gainActuel,
-      progression
-    }
-
     // Transformer les paliers avec infos calculées
     const paliersAvecInfos: PalierAvecInfos[] = montante.paliers.map((palier, index) => {
       // Calculer la progression à ce palier
@@ -75,9 +67,19 @@ export async function GET(
 
       return {
         ...palier,
+        detailsMatchs: palier.detailsMatchs as DetailsMatchs,
         progressionTotale: progressionPalier
       }
     })
+
+    // Transformer la montante
+    const montanteAvecNumero: MontanteAvecNumero = {
+      ...montante,
+      numeroAffichage,
+      gainActuel,
+      progression,
+      paliers: paliersAvecInfos
+    }
 
     return NextResponse.json({
       montante: montanteAvecNumero,
