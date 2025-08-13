@@ -5,12 +5,14 @@ export type {
   HistoriqueBankroll,
   Settings,
   Admin,
-  Objectif,
   EtatMontante,
   TypeOperation,
   TypePari,
   StatutPalier
 } from '@prisma/client'
+
+// Définir Objectif manuellement car il semble ne pas être exporté correctement
+export type Objectif = 'X2' | 'X3' | 'X5' | 'X10'
 
 // Types étendus avec infos calculées
 export interface MontanteAvecNumero {
