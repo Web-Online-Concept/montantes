@@ -33,33 +33,33 @@ export const metadata: Metadata = {
   },
 }
 
-// Données structurées pour les mentions légales
-export const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebPage',
-  name: 'Mentions Légales - Montantes.pro',
-  description: 'Mentions légales du site Montantes.pro',
-  url: 'https://montantes.pro/mentions-legales',
-  publisher: {
-    '@type': 'Organization',
-    name: 'Web Online Concept',
-    address: {
-      '@type': 'PostalAddress',
-      streetAddress: 'Rue Paul Estival',
-      addressLocality: 'Toulouse',
-      postalCode: '31200',
-      addressCountry: 'FR',
-    },
-    email: 'web.online.concept@gmail.com',
-    taxID: '510 583 800 00048',
-  },
-}
-
 export default function MentionsLegalesLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  // Données structurées pour les mentions légales (sans export)
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: 'Mentions Légales - Montantes.pro',
+    description: 'Mentions légales du site Montantes.pro',
+    url: 'https://montantes.pro/mentions-legales',
+    publisher: {
+      '@type': 'Organization',
+      name: 'Web Online Concept',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Rue Paul Estival',
+        addressLocality: 'Toulouse',
+        postalCode: '31200',
+        addressCountry: 'FR',
+      },
+      email: 'web.online.concept@gmail.com',
+      taxID: '510 583 800 00048',
+    },
+  }
+
   return (
     <>
       <script
