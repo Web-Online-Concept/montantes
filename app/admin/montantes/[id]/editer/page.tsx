@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { MontanteAvecNumero, PalierAvecInfos, Objectif, OBJECTIFS_CONFIG, VALIDATION, ETATS_CONFIG, formatEuro, formatPourcentage } from '@/types'
+import { MontanteAvecNumero, PalierAvecInfos, Objectif, OBJECTIFS_CONFIG, VALIDATION, ETATS_CONFIG, formatEuro, formatPourcentage, EtatMontante } from '@/types'
 import AdminLayout from '@/components/admin/AdminLayout'
 import FormulairePalier from '@/components/admin/FormulairePalier'
 import ValidationMatchsCombine from '@/components/admin/ValidationMatchsCombine'
@@ -223,7 +223,7 @@ export default function EditerMontantePage() {
 
   if (!montante) return null
 
-  const etatConfig = ETATS_CONFIG[montante.etat]
+  const etatConfig = ETATS_CONFIG[montante.etat as EtatMontante]
   const objectifConfig = OBJECTIFS_CONFIG[montante.objectif]
 
   return (
@@ -296,7 +296,7 @@ export default function EditerMontantePage() {
           {/* Barre de progression */}
           <div className="mt-6">
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm text-gray-600">Progression vers l&apos;objectif {objectifConfig.label}</span>
+              <span className="text-sm text-gray-600">Progression vers l'objectif {objectifConfig.label}</span>
               <span className="text-sm font-medium">
                 {formatEuro(montante.gainActuel || montante.miseInitiale)} / {formatEuro(montante.miseInitiale * objectifConfig.multiplicateur)}
               </span>
