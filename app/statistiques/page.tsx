@@ -92,14 +92,14 @@ export default function StatistiquesPage() {
   return (
     <div className="py-8 space-y-8">
       {/* Titre */}
-      <section>
+      <section className="text-center">
         <h1 className="text-4xl font-black text-[#1e40af] mb-2">Statistiques</h1>
         <p className="text-gray-600">Vue d&apos;ensemble des performances et analyses détaillées</p>
       </section>
 
       {/* Sélecteur de période */}
       <section className="bg-white rounded-lg shadow-sm p-4">
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => setPeriode('30j')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
