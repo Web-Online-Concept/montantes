@@ -24,7 +24,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
       etatConfig = {
         label: 'Arrêtée' as const,
         couleur: '#6b7280',
-        emoji: 'ℹ️' as const
+        emoji: '⏹️' as const
       }
     }
   }
