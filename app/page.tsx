@@ -119,7 +119,7 @@ export default function HomePage() {
             </div>
 
             {/* Filtres avec nouveau design */}
-            <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:gap-3">
+            <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:gap-3 md:justify-center">
               <button
                 onClick={() => setFiltre('toutes')}
                 className={`relative px-4 py-2.5 rounded-xl font-medium transition-all text-sm md:text-base ${
@@ -168,15 +168,6 @@ export default function HomePage() {
                   </button>
                 );
               })}
-            </div>
-
-            {/* Indicateur du filtre actif */}
-            <div className="mt-4 flex items-center gap-2 text-sm text-gray-600">
-              <span>Affichage :</span>
-              <span className="font-semibold text-blue-700">
-                {montantesTriees.length} montante{montantesTriees.length > 1 ? 's' : ''}
-                {filtre !== 'toutes' && ` ${filtre === 'EN_COURS' ? 'en cours' : filtre === 'REUSSI' ? 'gagnées' : 'perdues'}`}
-              </span>
             </div>
           </div>
         </div>
