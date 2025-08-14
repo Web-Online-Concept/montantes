@@ -60,7 +60,7 @@ export default function MontanteDetailPage() {
       etatConfig = {
         label: montante.etat as any,
         couleur: '#6b7280',
-        emoji: '⏹️' as const
+        emoji: 'ℹ️' as const
       }
     }
   }
@@ -96,26 +96,32 @@ export default function MontanteDetailPage() {
     
   // Déterminer le statut du palier actuel
   let statutPalier = ''
-  if (montante.etat === 'EN_COURS' && paliers && paliers.length > 0) {
-    // Trier les paliers par numéro
-    const paliersOrdonnes = [...paliers].sort((a, b) => a.numeroPalier - b.numeroPalier)
-    const dernierPalier = paliersOrdonnes[paliersOrdonnes.length - 1]
-    
-    if (dernierPalier.statut === 'EN_ATTENTE') {
-      statutPalier = `Palier ${dernierPalier.numeroPalier} en cours`
-    } else if (dernierPalier.statut === 'GAGNE') {
-      // Si le dernier est gagné, le prochain est en attente
-      statutPalier = `Palier ${dernierPalier.numeroPalier + 1} en attente`
+  const isTerminee = montante.etat === 'REUSSI' || montante.etat === 'PERDU' || montante.etat === 'ARRETEE'
+  
+  if (montante.etat === 'EN_COURS') {
+    if (!paliers || paliers.length === 0) {
+      // Pas encore de paliers = Palier 1 en attente
+      statutPalier = 'Palier 1 en attente'
+    } else {
+      // Trier les paliers par numéro
+      const paliersOrdonnes = [...paliers].sort((a, b) => a.numeroPalier - b.numeroPalier)
+      const dernierPalier = paliersOrdonnes[paliersOrdonnes.length - 1]
+      
+      if (dernierPalier.statut === 'EN_ATTENTE') {
+        statutPalier = `Palier ${dernierPalier.numeroPalier} en cours`
+      } else if (dernierPalier.statut === 'GAGNE') {
+        // Si le dernier est gagné, le prochain est en attente
+        statutPalier = `Palier ${dernierPalier.numeroPalier + 1} en attente`
+      }
     }
+  } else if (isTerminee) {
+    statutPalier = 'Terminée'
   }
   
   const objectifMontant = montante.miseInitiale * objectifConfig.multiplicateur
   const progressionObjectif = gainActuelReel > 0
     ? Math.min((gainActuelReel / objectifMontant) * 100, 100)
     : 0
-
-  // Déterminer si la montante est terminée
-  const isTerminee = montante.etat === 'REUSSI' || montante.etat === 'PERDU' || montante.etat === 'ARRETEE'
 
   return (
     <div className="min-h-screen bg-slate-50 py-8">
@@ -148,7 +154,8 @@ export default function MontanteDetailPage() {
                   Montante n°{montante.numeroAffichage}
                 </h1>
                 <p className="text-gray-600 mt-1">
-                  {statutPalier || `Créée le ${new Date(montante.dateDebut).toLocaleDateString('fr-FR')}`}
+                  Créée le {new Date(montante.dateDebut).toLocaleDateString('fr-FR')}
+                  {statutPalier && ` - ${statutPalier}`}
                 </p>
               </div>
               <div className="text-right">
