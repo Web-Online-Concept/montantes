@@ -44,16 +44,21 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
   
   // Déterminer le statut du palier actuel
   let statutPalier = ''
-  if (montante.etat === 'EN_COURS' && montante.paliers && montante.paliers.length > 0) {
-    // Trier les paliers par numéro
-    const paliersOrdonnes = [...montante.paliers].sort((a, b) => a.numeroPalier - b.numeroPalier)
-    const dernierPalier = paliersOrdonnes[paliersOrdonnes.length - 1]
-    
-    if (dernierPalier.statut === 'EN_ATTENTE') {
-      statutPalier = `Palier ${dernierPalier.numeroPalier} en cours`
-    } else if (dernierPalier.statut === 'GAGNE') {
-      // Si le dernier est gagné, le prochain est en attente
-      statutPalier = `Palier ${dernierPalier.numeroPalier + 1} en attente`
+  if (montante.etat === 'EN_COURS') {
+    if (!montante.paliers || montante.paliers.length === 0) {
+      // Pas encore de paliers = Palier 1 en attente
+      statutPalier = 'Palier 1 en attente'
+    } else {
+      // Trier les paliers par numéro
+      const paliersOrdonnes = [...montante.paliers].sort((a, b) => a.numeroPalier - b.numeroPalier)
+      const dernierPalier = paliersOrdonnes[paliersOrdonnes.length - 1]
+      
+      if (dernierPalier.statut === 'EN_ATTENTE') {
+        statutPalier = `Palier ${dernierPalier.numeroPalier} en cours`
+      } else if (dernierPalier.statut === 'GAGNE') {
+        // Si le dernier est gagné, le prochain est en attente
+        statutPalier = `Palier ${dernierPalier.numeroPalier + 1} en attente`
+      }
     }
   } else if (isTerminee) {
     statutPalier = 'Terminée'
