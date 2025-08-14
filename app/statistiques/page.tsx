@@ -181,7 +181,7 @@ export default function StatistiquesPage() {
         
         <StatsCard
           title="Montantes Réussies"
-          value={`${montantesReussiesTotal}/${stats.nombreTotal || 0}`}
+          value={`${montantesReussiesTotal}/${montantesTerminees}`}
           icon="📊"
           color="primary"
           centered={true}
