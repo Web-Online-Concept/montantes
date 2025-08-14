@@ -127,11 +127,11 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
           
           {/* Infos principales */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
+            <div className="text-center">
               <p className="text-xs text-gray-500">Mise initiale</p>
               <p className="font-semibold">{formatEuro(montante.miseInitiale)}</p>
             </div>
-            <div>
+            <div className="text-center">
               <p className="text-xs text-gray-500">
                 {isTerminee ? 'Gain final' : 'Gain actuel'}
               </p>
