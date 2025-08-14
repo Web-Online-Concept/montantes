@@ -113,9 +113,9 @@ export default function HistoriquePage() {
 
         {/* Filtres */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-4 md:gap-8">
             {/* Filtre par type */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <label className="text-sm text-gray-600">Type :</label>
               <select
                 value={typeFiltre}
@@ -129,7 +129,7 @@ export default function HistoriquePage() {
             </div>
 
             {/* Filtre par période */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center justify-center space-x-2">
               <label className="text-sm text-gray-600">Période :</label>
               <div className="flex space-x-2">
                 {(['7j', '30j', '90j', 'tout'] as PeriodeFiltre[]).map(p => (
