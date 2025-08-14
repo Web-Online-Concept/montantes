@@ -82,19 +82,72 @@ export default function HomePage() {
           
           <div className="relative">
             {/* Header de la section filtres */}
-            <div className="flex items-center justify-between mb-4 md:mb-6">
-              <h2 className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-0 md:gap-6">
+              {/* Titre */}
+              <h2 className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 mb-4 md:mb-0">
                 <span className="text-2xl">🎯</span>
                 <span>Montantes</span>
                 <span className="text-sm font-normal text-gray-500 ml-2">({montantes.length} au total)</span>
               </h2>
+              
+              {/* Filtres - centrés sur desktop */}
+              <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:flex-1">
+                <button
+                  onClick={() => setFiltre('toutes')}
+                  className={`relative px-4 py-2 md:py-1.5 rounded-xl font-medium transition-all text-sm md:text-base ${
+                    filtre === 'toutes' 
+                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
+                      : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
+                  }`}
+                >
+                  <span className="flex items-center justify-center gap-1.5">
+                    <span>Toutes</span>
+                    <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
+                      {montantes.length}
+                    </span>
+                  </span>
+                </button>
+                
+                {(['EN_COURS', 'REUSSI', 'PERDU'] as const).map(etat => {
+                  const count = montantes.filter(m => {
+                    if (etat === 'REUSSI') {
+                      return m.etat === 'REUSSI' || m.etat === 'ARRETEE'
+                    }
+                    return m.etat === etat
+                  }).length;
+                  
+                  return (
+                    <button
+                      key={etat}
+                      onClick={() => setFiltre(etat)}
+                      className={`relative px-4 py-2 md:py-1.5 rounded-xl font-medium transition-all text-sm md:text-base ${
+                        filtre === etat 
+                          ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
+                          : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
+                      }`}
+                    >
+                      <span className="flex items-center justify-center gap-1.5">
+                        <span className="text-lg">{ETATS_CONFIG[etat].emoji}</span>
+                        <span className="hidden sm:inline">{ETATS_CONFIG[etat].label}</span>
+                        <span className="sm:hidden">
+                          {etat === 'EN_COURS' ? 'En cours' : 
+                           etat === 'REUSSI' ? 'Gagnées' : 'Perdues'}
+                        </span>
+                        <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
+                          {count}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
               
               {/* Tri sur desktop */}
               <div className="hidden md:block">
                 <select
                   value={tri}
                   onChange={(e) => setTri(e.target.value as TriMontante)}
-                  className="px-4 py-2 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
+                  className="px-4 py-1.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
                 >
                   <option value="recent">📅 Plus récentes</option>
                   <option value="ancien">📅 Plus anciennes</option>
@@ -116,58 +169,6 @@ export default function HomePage() {
                 <option value="progression">📊 Progression ↓</option>
                 <option value="mise">💰 Mise ↓</option>
               </select>
-            </div>
-
-            {/* Filtres avec nouveau design */}
-            <div className="grid grid-cols-2 gap-2 md:flex md:flex-wrap md:gap-3 md:justify-center">
-              <button
-                onClick={() => setFiltre('toutes')}
-                className={`relative px-4 py-2.5 rounded-xl font-medium transition-all text-sm md:text-base ${
-                  filtre === 'toutes' 
-                    ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
-                    : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
-                }`}
-              >
-                <span className="flex items-center justify-center gap-1.5">
-                  <span>Toutes</span>
-                  <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
-                    {montantes.length}
-                  </span>
-                </span>
-              </button>
-              
-              {(['EN_COURS', 'REUSSI', 'PERDU'] as const).map(etat => {
-                const count = montantes.filter(m => {
-                  if (etat === 'REUSSI') {
-                    return m.etat === 'REUSSI' || m.etat === 'ARRETEE'
-                  }
-                  return m.etat === etat
-                }).length;
-                
-                return (
-                  <button
-                    key={etat}
-                    onClick={() => setFiltre(etat)}
-                    className={`relative px-4 py-2.5 rounded-xl font-medium transition-all text-sm md:text-base ${
-                      filtre === etat 
-                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
-                        : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
-                    }`}
-                  >
-                    <span className="flex items-center justify-center gap-1.5">
-                      <span className="text-lg">{ETATS_CONFIG[etat].emoji}</span>
-                      <span className="hidden sm:inline">{ETATS_CONFIG[etat].label}</span>
-                      <span className="sm:hidden">
-                        {etat === 'EN_COURS' ? 'En cours' : 
-                         etat === 'REUSSI' ? 'Gagnées' : 'Perdues'}
-                      </span>
-                      <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
-                        {count}
-                      </span>
-                    </span>
-                  </button>
-                );
-              })}
             </div>
           </div>
         </div>

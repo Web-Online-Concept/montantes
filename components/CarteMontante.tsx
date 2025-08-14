@@ -24,7 +24,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
       etatConfig = {
         label: 'Arrêtée' as const,
         couleur: '#6b7280',
-        emoji: '⏹️' as const
+        emoji: 'ℹ️' as const
       }
     }
   }
@@ -55,6 +55,8 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
       // Si le dernier est gagné, le prochain est en attente
       statutPalier = `Palier ${dernierPalier.numeroPalier + 1} en attente`
     }
+  } else if (isTerminee) {
+    statutPalier = 'Terminée'
   }
   
   // Calculer le pourcentage de progression vers l'objectif
@@ -78,7 +80,8 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
                 Montante n°{montante.numeroAffichage}
               </h3>
               <p className="text-sm opacity-90">
-                {statutPalier || `Créée le ${new Date(montante.dateDebut).toLocaleDateString('fr-FR')}`}
+                Créée le {new Date(montante.dateDebut).toLocaleDateString('fr-FR')}
+                {statutPalier && ` - ${statutPalier}`}
               </p>
             </div>
             <div className="text-right">
