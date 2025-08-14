@@ -192,7 +192,7 @@ export default function HomePage() {
       </div>
 
       {/* Liste des montantes */}
-      <div className="max-w-7xl mx-auto px-4 pb-16">
+      <div className="max-w-7xl mx-auto px-4 pb-6 md:pb-16">
         {montantesTriees.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">Aucune montante trouvée</p>
@@ -207,7 +207,7 @@ export default function HomePage() {
       </div>
 
       {/* CTA Telegram */}
-      <div className="bg-blue-900 text-white py-6 md:py-12">
+      <div className="bg-blue-900 text-white pt-6 pb-6 md:py-12">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">
             Suivez nos montantes en direct sur Telegram
