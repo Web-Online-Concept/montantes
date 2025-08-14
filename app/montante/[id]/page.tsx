@@ -93,6 +93,12 @@ export default function MontanteDetailPage() {
   const progressionReelle = gainActuelReel > 0 
     ? ((gainActuelReel - montante.miseInitiale) / montante.miseInitiale) * 100
     : 0
+  
+  // Calculer la progression vers l'objectif
+  const objectifMontant = montante.miseInitiale * objectifConfig.multiplicateur
+  const progressionObjectif = gainActuelReel > 0
+    ? Math.min((gainActuelReel / objectifMontant) * 100, 100)
+    : 0
     
   // Déterminer le statut du palier actuel
   let statutPalier = ''
@@ -141,11 +147,6 @@ export default function MontanteDetailPage() {
     // Montante terminée sans date de fin (fallback)
     statutPalier = 'Terminée'
   }
-  
-  const objectifMontant = montante.miseInitiale * objectifConfig.multiplicateur
-  const progressionObjectif = gainActuelReel > 0
-    ? Math.min((gainActuelReel / objectifMontant) * 100, 100)
-    : 0
 
   return (
     <div className="min-h-screen bg-slate-50 py-8">
