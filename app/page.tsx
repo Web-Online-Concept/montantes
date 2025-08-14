@@ -66,6 +66,9 @@ export default function HomePage() {
     )
   }
 
+  // Calculer le nombre de montantes gagnées pour l'affichage desktop
+  const montantesGagnees = (stats?.reussies || 0) + (stats?.arretees || 0)
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
@@ -116,34 +119,31 @@ export default function HomePage() {
               />
             </div>
 
-            {/* VERSION DESKTOP - centrée et réorganisée */}
+            {/* VERSION DESKTOP - centrée avec nouveaux titres et valeurs */}
             <div className="hidden md:block col-span-1">
               <StatsCard
-                title="Bankroll actuelle"
-                value={formatEuro(stats.bankrollActuelle || 0)}
-                variation={stats.bankrollInitiale > 0 ? 
-                  ((stats.bankrollActuelle - stats.bankrollInitiale) / stats.bankrollInitiale) * 100
-                  : stats.bankrollActuelle > 0 ? 100 : 0}
+                title="Bilan total"
+                value={formatEuro(stats.bilanTotal || 0)}
                 icon="💰"
-                color="primary"
+                color={(stats.bilanTotal || 0) > 0 ? "success" : "danger"}
                 centered={true}
               />
             </div>
             <div className="hidden md:block col-span-1">
               <StatsCard
-                title="ROI"
+                title="ROI Global"
                 value={formatPourcentage(stats.roi || 0)}
                 icon="💎"
-                color="accent"
+                color={(stats.roi || 0) > 0 ? "success" : "danger"}
                 centered={true}
               />
             </div>
             <div className="hidden md:block col-span-1">
               <StatsCard
-                title="Performance"
-                value={formatPourcentage(stats.tauxReussite || 0)}
-                icon="📈"
-                color={stats.roi > 0 ? "success" : "warning"}
+                title="Montantes Gagnées"
+                value={montantesGagnees.toString()}
+                icon="🏆"
+                color="success"
                 centered={true}
               />
             </div>
