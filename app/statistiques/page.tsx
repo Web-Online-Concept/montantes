@@ -155,34 +155,35 @@ export default function StatistiquesPage() {
       {/* Stats principales - VERSION MOBILE (2 par ligne) */}
       <section className="grid grid-cols-2 md:hidden gap-4">
         <StatsCard
-          title="Taux de réussite"
+          title="Bilan total Montantes"
+          value={formatEuro(stats.bilanTotal || 0)}
+          icon="💰"
+          color={(stats.bilanTotal || 0) > 0 ? 'success' : 'danger'}
+          centered={true}
+        />
+        
+        <StatsCard
+          title="Montantes Réussies"
+          value={`${montantesReussiesTotal}/${montantesTerminees}`}
+          icon="📊"
+          color="primary"
+          centered={true}
+        />
+        
+        <StatsCard
+          title="Taux de Réussite"
           value={formatPourcentage(stats.tauxReussite || 0)}
-          subtitle={`${montantesReussiesTotal}/${montantesTerminees}`}
           icon="🎯"
           color={stats.tauxReussite >= 70 ? 'success' : stats.tauxReussite >= 50 ? 'warning' : 'danger'}
+          centered={true}
         />
         
         <StatsCard
           title="ROI Global"
           value={formatPourcentage(stats.roi || 0)}
-          variation={stats.roi || 0}
-          icon="📊"
+          icon="💎"
           color={(stats.roi || 0) > 0 ? 'success' : 'danger'}
-        />
-        
-        <StatsCard
-          title="Bilan total"
-          value={formatEuro(stats.bilanTotal || 0)}
-          icon="💰"
-          color={(stats.bilanTotal || 0) > 0 ? 'success' : 'danger'}
-        />
-        
-        <StatsCard
-          title="En cours"
-          value={(stats.enCours || 0).toString()}
-          subtitle={`Capital: ${formatEuro(stats.misesEngagees || 0)}`}
-          icon="⏳"
-          color="primary"
+          centered={true}
         />
       </section>
 
@@ -220,6 +221,14 @@ export default function StatistiquesPage() {
           centered={true}
         />
       </section>
+
+      {/* Graphique de progression */}
+      {historique.length > 0 && (
+        <section className="bg-white rounded-xl shadow-lg p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-6">Évolution de la bankroll</h2>
+          <GraphiqueProgression data={historique} />
+        </section>
+      )}
 
       {/* Stats détaillées */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -314,14 +323,6 @@ export default function StatistiquesPage() {
           </div>
         </div>
       </section>
-
-      {/* Graphique de progression */}
-      {historique.length > 0 && (
-        <section className="bg-white rounded-xl shadow-lg p-6">
-          <h2 className="text-xl font-bold text-gray-900 mb-6">Évolution de la bankroll</h2>
-          <GraphiqueProgression data={historique} />
-        </section>
-      )}
 
       {/* Top 10 des meilleures montantes */}
       {meilleuresMontantes.length > 0 && (
