@@ -60,7 +60,7 @@ export default function MontanteDetailPage() {
       etatConfig = {
         label: montante.etat as any,
         couleur: '#6b7280',
-        emoji: '⏹️' as const
+        emoji: 'ℹ️' as const
       }
     }
   }
@@ -185,8 +185,13 @@ export default function MontanteDetailPage() {
                   {isTerminee && montante.dateFin ? 
                     `Finie le ${new Date(montante.dateFin).toLocaleDateString('fr-FR')}` : 
                     `Créée le ${new Date(montante.dateDebut).toLocaleDateString('fr-FR')}`}
-                  {statutPalier && ` - ${statutPalier}`}
                 </p>
+                {statutPalier && (
+                  <p className="text-gray-600 text-sm md:hidden">{statutPalier}</p>
+                )}
+                {statutPalier && (
+                  <span className="hidden md:inline text-gray-600"> - {statutPalier}</span>
+                )}
               </div>
               <div className="text-right">
                 <p className="text-sm text-gray-600">Objectif</p>
@@ -197,27 +202,27 @@ export default function MontanteDetailPage() {
               </div>
             </div>
 
-            {/* Cartes de stats */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            {/* Cartes de stats - 2 par ligne sur mobile */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
               <div className="bg-gray-50 rounded-lg p-4 text-center">
                 <p className="text-sm text-gray-600">Mise initiale</p>
-                <p className="text-xl font-bold text-gray-900">{formatEuro(montante.miseInitiale)}</p>
+                <p className="text-lg md:text-xl font-bold text-gray-900">{formatEuro(montante.miseInitiale)}</p>
               </div>
               <div className="bg-green-50 rounded-lg p-4 text-center">
                 <p className="text-sm text-gray-600">
                   {isTerminee ? 'Gain final' : 'Gain actuel'}
                 </p>
-                <p className="text-xl font-bold text-green-600">{formatEuro(gainActuelReel)}</p>
+                <p className="text-lg md:text-xl font-bold text-green-600">{formatEuro(gainActuelReel)}</p>
               </div>
               <div className={`rounded-lg p-4 text-center ${progressionReelle > 0 ? 'bg-green-50' : 'bg-red-50'}`}>
                 <p className="text-sm text-gray-600">Progression</p>
-                <p className={`text-xl font-bold ${progressionReelle > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className={`text-lg md:text-xl font-bold ${progressionReelle > 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {formatPourcentage(progressionReelle)}
                 </p>
               </div>
               <div className="bg-blue-50 rounded-lg p-4 text-center">
                 <p className="text-sm text-gray-600">État</p>
-                <p className="text-xl font-bold" style={{ color: etatConfig.couleur }}>
+                <p className="text-lg md:text-xl font-bold" style={{ color: etatConfig.couleur }}>
                   {etatConfig.label}
                 </p>
               </div>
@@ -251,13 +256,13 @@ export default function MontanteDetailPage() {
           </div>
         </div>
 
-        {/* Informations détaillées */}
+        {/* Informations détaillées - 2 par ligne sur mobile */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">Informations détaillées</h2>
-          <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <dl className="grid grid-cols-2 gap-4">
             <div className="text-center">
               <dt className="text-sm text-gray-600">Date de début</dt>
-              <dd className="font-medium">{new Date(montante.dateDebut).toLocaleDateString('fr-FR', { 
+              <dd className="font-medium text-sm md:text-base">{new Date(montante.dateDebut).toLocaleDateString('fr-FR', { 
                 weekday: 'long',
                 year: 'numeric',
                 month: 'long',
@@ -267,7 +272,7 @@ export default function MontanteDetailPage() {
             {montante.dateFin && (
               <div className="text-center">
                 <dt className="text-sm text-gray-600">Date de fin</dt>
-                <dd className="font-medium">{new Date(montante.dateFin).toLocaleDateString('fr-FR', { 
+                <dd className="font-medium text-sm md:text-base">{new Date(montante.dateFin).toLocaleDateString('fr-FR', { 
                   weekday: 'long',
                   year: 'numeric',
                   month: 'long',
@@ -277,23 +282,23 @@ export default function MontanteDetailPage() {
             )}
             <div className="text-center">
               <dt className="text-sm text-gray-600">Nombre de paliers</dt>
-              <dd className="font-medium">{paliers.length} palier{paliers.length > 1 ? 's' : ''}</dd>
+              <dd className="font-medium text-sm md:text-base">{paliers.length} palier{paliers.length > 1 ? 's' : ''}</dd>
             </div>
             <div className="text-center">
-              <dt className="text-sm text-gray-600">ROI (Return on Investment)</dt>
-              <dd className={`font-medium ${progressionReelle > 0 ? 'text-green-600' : progressionReelle < 0 ? 'text-red-600' : 'text-gray-900'}`}>
+              <dt className="text-sm text-gray-600">ROI</dt>
+              <dd className={`font-medium text-sm md:text-base ${progressionReelle > 0 ? 'text-green-600' : progressionReelle < 0 ? 'text-red-600' : 'text-gray-900'}`}>
                 {formatPourcentage(progressionReelle)}
               </dd>
             </div>
             {montante.dureeJours > 0 && (
               <div className="text-center">
                 <dt className="text-sm text-gray-600">Durée</dt>
-                <dd className="font-medium">{montante.dureeJours} jour{montante.dureeJours > 1 ? 's' : ''}</dd>
+                <dd className="font-medium text-sm md:text-base">{montante.dureeJours} jour{montante.dureeJours > 1 ? 's' : ''}</dd>
               </div>
             )}
             <div className="text-center">
               <dt className="text-sm text-gray-600">Bookmaker</dt>
-              <dd className="font-medium">
+              <dd className="font-medium text-sm md:text-base">
                 <a 
                   href="https://rounders.pro/jouer-sur-stake" 
                   target="_blank" 
