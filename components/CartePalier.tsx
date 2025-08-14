@@ -76,11 +76,11 @@ export default function CartePalier({ palier, montante }: CartePalierProps) {
                     {match.equipe1} vs {match.equipe2}
                   </p>
                   <p className="text-xs md:text-sm text-gray-600">{match.competition}</p>
-                  <div className="mt-1 md:flex md:items-center md:gap-3">
+                  <div className="mt-1 flex items-center gap-2">
                     <p className="text-xs md:text-sm text-[#1e40af] font-bold">
                       ➤ {match.pronostic}
                     </p>
-                    <p className="text-xs md:text-sm font-bold text-gray-700 bg-white px-2 py-0.5 rounded inline-block mt-1 md:mt-0">
+                    <p className="text-xs md:text-sm font-bold text-gray-700 bg-white px-2 py-0.5 rounded">
                       @ {match.cote ? formatCote(match.cote) : '—'}
                     </p>
                   </div>
