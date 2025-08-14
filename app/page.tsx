@@ -77,7 +77,8 @@ export default function HomePage() {
             <span className="block md:inline"> Paris Sportifs</span>
           </h1>
           <p className="text-sm md:text-xl text-blue-100 mb-2 md:mb-0">
-            Suivez nos montantes avec notre système transparent et nos statistiques détaillées
+            <span className="md:hidden">Suivez nos montantes & nos statistiques détaillées</span>
+            <span className="hidden md:inline">Suivez nos montantes avec notre système transparent et nos statistiques détaillées</span>
           </p>
         </div>
       </div>
