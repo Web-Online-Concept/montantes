@@ -223,9 +223,9 @@ export default function MontanteDetailPage() {
 
         {/* Informations détaillées */}
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Informations détaillées</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">Informations détaillées</h2>
           <dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
+            <div className="text-center">
               <dt className="text-sm text-gray-600">Date de début</dt>
               <dd className="font-medium">{new Date(montante.dateDebut).toLocaleDateString('fr-FR', { 
                 weekday: 'long',
@@ -235,7 +235,7 @@ export default function MontanteDetailPage() {
               })}</dd>
             </div>
             {montante.dateFin && (
-              <div>
+              <div className="text-center">
                 <dt className="text-sm text-gray-600">Date de fin</dt>
                 <dd className="font-medium">{new Date(montante.dateFin).toLocaleDateString('fr-FR', { 
                   weekday: 'long',
@@ -245,30 +245,30 @@ export default function MontanteDetailPage() {
                 })}</dd>
               </div>
             )}
-            <div>
+            <div className="text-center">
               <dt className="text-sm text-gray-600">Nombre de paliers</dt>
               <dd className="font-medium">{paliers.length} palier{paliers.length > 1 ? 's' : ''}</dd>
             </div>
-            <div>
+            <div className="text-center">
               <dt className="text-sm text-gray-600">ROI (Return on Investment)</dt>
               <dd className={`font-medium ${progressionReelle > 0 ? 'text-green-600' : progressionReelle < 0 ? 'text-red-600' : 'text-gray-900'}`}>
                 {formatPourcentage(progressionReelle)}
               </dd>
             </div>
             {montante.dureeJours > 0 && (
-              <div>
+              <div className="text-center">
                 <dt className="text-sm text-gray-600">Durée</dt>
                 <dd className="font-medium">{montante.dureeJours} jour{montante.dureeJours > 1 ? 's' : ''}</dd>
               </div>
             )}
-            <div>
+            <div className="text-center">
               <dt className="text-sm text-gray-600">Bookmaker</dt>
               <dd className="font-medium">
                 <a 
                   href="https://rounders.pro/jouer-sur-stake" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="text-[#8b5cf6] hover:text-[#7c3aed] transition-colors inline-flex items-center"
+                  className="text-[#8b5cf6] hover:text-[#7c3aed] transition-colors inline-flex items-center justify-center"
                 >
                   Stake
                   <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
