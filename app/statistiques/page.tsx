@@ -93,13 +93,30 @@ export default function StatistiquesPage() {
     <div className="py-8 space-y-8">
       {/* Titre */}
       <section className="text-center">
-        <h1 className="text-4xl font-black text-[#1e40af] mb-2">Statistiques</h1>
-        <p className="text-gray-600">Vue d&apos;ensemble des performances et analyses détaillées</p>
+        <h1 className="text-4xl font-black text-[#1e40af] mb-2">
+          <span className="md:hidden">Performances et analyses détaillées</span>
+          <span className="hidden md:inline">Statistiques</span>
+        </h1>
+        <p className="text-gray-600 hidden md:block">Vue d&apos;ensemble des performances et analyses détaillées</p>
       </section>
 
       {/* Sélecteur de période */}
       <section className="bg-white rounded-lg shadow-sm p-4">
-        <div className="flex flex-wrap gap-2 justify-center">
+        {/* VERSION MOBILE - Menu déroulant */}
+        <div className="md:hidden">
+          <select
+            value={periode}
+            onChange={(e) => setPeriode(e.target.value as '30j' | '90j' | 'tout')}
+            className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#1e40af] text-sm font-medium"
+          >
+            <option value="30j">📅 30 derniers jours</option>
+            <option value="90j">📅 90 derniers jours</option>
+            <option value="tout">📊 Tout l'historique</option>
+          </select>
+        </div>
+
+        {/* VERSION DESKTOP - Boutons */}
+        <div className="hidden md:flex flex-wrap gap-2 justify-center">
           <button
             onClick={() => setPeriode('30j')}
             className={`px-4 py-2 rounded-lg font-medium transition-colors ${
@@ -133,12 +150,12 @@ export default function StatistiquesPage() {
         </div>
       </section>
 
-      {/* Stats principales - VERSION MOBILE (inchangée) */}
-      <section className="grid grid-cols-1 md:hidden gap-6">
+      {/* Stats principales - VERSION MOBILE (2 par ligne) */}
+      <section className="grid grid-cols-2 md:hidden gap-4">
         <StatsCard
           title="Taux de réussite"
           value={formatPourcentage(stats.tauxReussite || 0)}
-          subtitle={`${montantesReussiesTotal} sur ${montantesTerminees} montantes`}
+          subtitle={`${montantesReussiesTotal}/${montantesTerminees}`}
           icon="🎯"
           color={stats.tauxReussite >= 70 ? 'success' : stats.tauxReussite >= 50 ? 'warning' : 'danger'}
         />
@@ -146,7 +163,6 @@ export default function StatistiquesPage() {
         <StatsCard
           title="ROI Global"
           value={formatPourcentage(stats.roi || 0)}
-          subtitle="Return on Investment"
           variation={stats.roi || 0}
           icon="📊"
           color={(stats.roi || 0) > 0 ? 'success' : 'danger'}
@@ -155,15 +171,14 @@ export default function StatistiquesPage() {
         <StatsCard
           title="Bilan total"
           value={formatEuro(stats.bilanTotal || 0)}
-          subtitle={`Gains: ${formatEuro(stats.gainsTotaux || 0)}`}
           icon="💰"
           color={(stats.bilanTotal || 0) > 0 ? 'success' : 'danger'}
         />
         
         <StatsCard
-          title="Montantes actives"
+          title="En cours"
           value={(stats.enCours || 0).toString()}
-          subtitle={`Capital engagé: ${formatEuro(stats.misesEngagees || 0)}`}
+          subtitle={`Capital: ${formatEuro(stats.misesEngagees || 0)}`}
           icon="⏳"
           color="primary"
         />
