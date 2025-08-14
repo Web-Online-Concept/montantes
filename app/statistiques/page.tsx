@@ -91,13 +91,15 @@ export default function StatistiquesPage() {
 
   return (
     <div className="py-8 space-y-8">
-      {/* Titre */}
+      {/* Titre et sous-titre avec versions mobile/desktop */}
       <section className="text-center">
         <h1 className="text-4xl font-black text-[#1e40af] mb-2">
-          <span className="md:hidden">Performances et analyses détaillées</span>
-          <span className="hidden md:inline">Statistiques</span>
+          Statistiques
         </h1>
-        <p className="text-gray-600 hidden md:block">Vue d&apos;ensemble des performances et analyses détaillées</p>
+        <p className="text-gray-600">
+          <span className="md:hidden">Performances et analyses détaillées</span>
+          <span className="hidden md:inline">Vue d'ensemble des performances et analyses détaillées</span>
+        </p>
       </section>
 
       {/* Sélecteur de période */}
@@ -145,7 +147,7 @@ export default function StatistiquesPage() {
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            Tout l&apos;historique
+            Tout l'historique
           </button>
         </div>
       </section>
