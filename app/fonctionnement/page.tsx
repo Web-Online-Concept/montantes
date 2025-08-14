@@ -214,7 +214,7 @@ export default function FonctionnementPage() {
                   <td className="px-4 py-3 text-center">{formatEuro(21)}</td>
                   <td className="px-4 py-3 text-center">× 1.45</td>
                   <td className="px-4 py-3 text-center font-semibold">{formatEuro(30.45)}</td>
-                  <td className="px-4 py-3 text-right text-green-600 font-semibold">{formatPourcentage(204)} ✓</td>
+                  <td className="px-4 py-3 text-right text-green-600 font-semibold">{formatPourcentage(204)} ✔</td>
                 </tr>
               </tbody>
             </table>
@@ -331,6 +331,84 @@ export default function FonctionnementPage() {
                 <h3 className="font-semibold mb-1">Gestion du capital</h3>
                 <p className="text-blue-100">Jamais plus de 5% de notre bankroll sur une seule montante.</p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Pourquoi Stake ? */}
+        <section className="bg-gradient-to-r from-[#8b5cf6] to-[#7c3aed] text-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+          <h2 className="text-xl md:text-2xl font-bold mb-4 md:mb-6">Pourquoi nous jouons sur Stake ?</h2>
+          
+          <div className="space-y-4 md:space-y-6">
+            <div className="flex flex-col md:flex-row md:items-start space-y-4 md:space-y-0 md:space-x-4">
+              <div className="flex-shrink-0 w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                <span className="text-2xl">💎</span>
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold text-lg mb-2">Les meilleures cotes du marché</h3>
+                <p className="text-purple-100 text-sm md:text-base">
+                  Nous plaçons exclusivement nos tickets sur <strong>Stake</strong> car ils proposent très souvent les meilleures cotes disponibles. 
+                  Cette différence de cotes peut sembler minime sur un pari unique, mais devient cruciale sur une montante où chaque dixième compte.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white/10 rounded-lg p-4 md:p-6">
+              <h3 className="font-semibold mb-3 text-[#fbbf24]">Exemple concret d'écart de cotes :</h3>
+              <div className="space-y-2 text-sm md:text-base">
+                <div className="flex flex-col sm:flex-row sm:justify-between">
+                  <span>PSG - OM (Victoire PSG)</span>
+                  <div className="flex gap-4 mt-1 sm:mt-0">
+                    <span className="font-semibold">Stake : 1.85</span>
+                    <span className="text-purple-200">ARJEL : 1.75</span>
+                  </div>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:justify-between">
+                  <span>Real - Barça (Plus 2.5 buts)</span>
+                  <div className="flex gap-4 mt-1 sm:mt-0">
+                    <span className="font-semibold">Stake : 1.62</span>
+                    <span className="text-purple-200">ARJEL : 1.55</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs md:text-sm text-purple-100 mt-3">
+                Sur une montante de 3 paliers, ces écarts peuvent représenter une différence de gain final de 15 à 20% !
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <h3 className="font-semibold text-[#fbbf24]">Pour ceux qui nous suivent :</h3>
+              <p className="text-purple-100 text-sm md:text-base">
+                Vous pouvez tout à fait utiliser vos bookmakers habituels (ARJEL ou hors ARJEL), mais gardez à l'esprit que :
+              </p>
+              <ul className="space-y-2 text-sm md:text-base">
+                <li className="flex items-start">
+                  <span className="text-[#fbbf24] mr-2">•</span>
+                  <span className="text-purple-100">Les cotes seront souvent inférieures, réduisant vos gains potentiels</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#fbbf24] mr-2">•</span>
+                  <span className="text-purple-100">Sur les montantes longues, l'écart de performance peut être significatif</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-[#fbbf24] mr-2">•</span>
+                  <span className="text-purple-100">Certains paris spécifiques pourraient ne pas être disponibles</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="text-center pt-4">
+              <a
+                href="https://rounders.pro/jouer-sur-stake"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center bg-white text-[#8b5cf6] px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold hover:bg-purple-50 transition-colors text-sm md:text-base"
+              >
+                <span>Découvrir Stake</span>
+                <svg className="w-4 h-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
             </div>
           </div>
         </section>
