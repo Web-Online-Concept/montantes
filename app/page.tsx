@@ -81,12 +81,12 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Stats Section - Optimisé pour mobile */}
+      {/* Stats Section - Optimisé pour mobile et desktop centré */}
       {stats && (
         <div className="max-w-7xl mx-auto px-4 -mt-6 md:-mt-8">
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
-            {/* Bankroll sur toute la largeur sur mobile */}
-            <div className="col-span-2 md:col-span-1">
+            {/* VERSION MOBILE - conservée telle quelle */}
+            <div className="col-span-2 md:hidden">
               <StatsCard
                 title="Bankroll actuelle"
                 value={formatEuro(stats.bankrollActuelle || 0)}
@@ -97,8 +97,7 @@ export default function HomePage() {
                 color="primary"
               />
             </div>
-            {/* Montantes actives et Performance côte à côte sur mobile */}
-            <div className="col-span-1">
+            <div className="col-span-1 md:hidden">
               <StatsCard
                 title="Montantes actives"
                 value={stats.enCours?.toString() || '0'}
@@ -107,13 +106,45 @@ export default function HomePage() {
                 color="accent"
               />
             </div>
-            <div className="col-span-1">
+            <div className="col-span-1 md:hidden">
               <StatsCard
                 title="Performance"
                 value={formatPourcentage(stats.tauxReussite || 0)}
                 subtitle={`ROI: ${formatPourcentage(stats.roi || 0)}`}
                 icon="📈"
                 color={stats.roi > 0 ? "success" : "warning"}
+              />
+            </div>
+
+            {/* VERSION DESKTOP - centrée et réorganisée */}
+            <div className="hidden md:block col-span-1">
+              <StatsCard
+                title="Bankroll actuelle"
+                value={formatEuro(stats.bankrollActuelle || 0)}
+                variation={stats.bankrollInitiale > 0 ? 
+                  ((stats.bankrollActuelle - stats.bankrollInitiale) / stats.bankrollInitiale) * 100
+                  : stats.bankrollActuelle > 0 ? 100 : 0}
+                icon="💰"
+                color="primary"
+                centered={true}
+              />
+            </div>
+            <div className="hidden md:block col-span-1">
+              <StatsCard
+                title="ROI"
+                value={formatPourcentage(stats.roi || 0)}
+                icon="💎"
+                color="accent"
+                centered={true}
+              />
+            </div>
+            <div className="hidden md:block col-span-1">
+              <StatsCard
+                title="Performance"
+                value={formatPourcentage(stats.tauxReussite || 0)}
+                icon="📈"
+                color={stats.roi > 0 ? "success" : "warning"}
+                centered={true}
               />
             </div>
           </div>

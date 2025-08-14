@@ -7,6 +7,7 @@ interface StatsCardProps {
   variation?: number
   icon?: string
   color?: 'primary' | 'accent' | 'success' | 'warning' | 'danger'
+  centered?: boolean
 }
 
 export default function StatsCard({ 
@@ -15,7 +16,8 @@ export default function StatsCard({
   subtitle, 
   variation, 
   icon,
-  color = 'primary' 
+  color = 'primary',
+  centered = false
 }: StatsCardProps) {
   
   const colorClasses = {
@@ -57,24 +59,24 @@ export default function StatsCard({
     <div className="bg-white rounded-xl shadow-lg p-6 relative overflow-hidden card-shadow">
       {/* Icône de fond */}
       {icon && (
-        <div className="absolute -right-4 -top-4 text-6xl opacity-10">
+        <div className={`absolute ${centered ? '-right-2 -top-2' : '-right-4 -top-4'} text-6xl opacity-10`}>
           {icon}
         </div>
       )}
 
       {/* Contenu */}
-      <div className="relative">
+      <div className={`relative ${centered ? 'text-center' : ''}`}>
         {/* Titre */}
         <h3 className="text-gray-600 text-sm font-medium mb-2">{title}</h3>
         
         {/* Valeur principale */}
-        <div className="flex items-baseline justify-between mb-3">
+        <div className={`flex items-baseline ${centered ? 'justify-center' : 'justify-between'} mb-3`}>
           <p className={`text-3xl font-black ${colors.text}`}>
             {value}
           </p>
           
-          {/* Variation */}
-          {variation !== undefined && (
+          {/* Variation - uniquement si non centré */}
+          {!centered && variation !== undefined && (
             <div className={`flex items-center space-x-1 ${variation >= 0 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
               {variation >= 0 ? (
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -91,6 +93,24 @@ export default function StatsCard({
             </div>
           )}
         </div>
+
+        {/* Variation centrée - sous la valeur principale */}
+        {centered && variation !== undefined && (
+          <div className={`flex items-center justify-center space-x-1 mb-3 ${variation >= 0 ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
+            {variation >= 0 ? (
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            )}
+            <span className="text-sm font-bold">
+              {typeof variation === 'number' ? formatPourcentage(variation) : variation}
+            </span>
+          </div>
+        )}
         
         {/* Sous-titre */}
         {subtitle && (
