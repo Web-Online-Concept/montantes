@@ -59,6 +59,14 @@ export default function HomePage() {
     )
   }
 
+  // Compter les montantes par état
+  const compteMontantes = {
+    toutes: montantes.length,
+    EN_COURS: montantes.filter(m => m.etat === 'EN_COURS').length,
+    REUSSI: montantes.filter(m => m.etat === 'REUSSI' || m.etat === 'ARRETEE').length,
+    PERDU: montantes.filter(m => m.etat === 'PERDU').length
+  }
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
@@ -81,84 +89,29 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 via-transparent to-purple-50/50 pointer-events-none" />
           
           <div className="relative">
-            {/* Header de la section filtres */}
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-0 md:gap-6">
-              {/* Titre */}
-              <h2 className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 mb-4 md:mb-0">
-                <span className="text-2xl">🎯</span>
-                <span>Montantes</span>
-                <span className="text-sm font-normal text-gray-500 ml-2">({montantes.length} au total)</span>
-              </h2>
-              
-              {/* Filtres - centrés sur desktop */}
-              <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:flex-1">
-                <button
-                  onClick={() => setFiltre('toutes')}
-                  className={`relative px-4 py-2 md:py-1.5 rounded-xl font-medium transition-all text-sm md:text-base ${
-                    filtre === 'toutes' 
-                      ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
-                      : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
-                  }`}
-                >
-                  <span className="flex items-center justify-center gap-1.5">
-                    <span>Toutes</span>
-                    <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
-                      {montantes.length}
-                    </span>
-                  </span>
-                </button>
-                
-                {(['EN_COURS', 'REUSSI', 'PERDU'] as const).map(etat => {
-                  const count = montantes.filter(m => {
-                    if (etat === 'REUSSI') {
-                      return m.etat === 'REUSSI' || m.etat === 'ARRETEE'
-                    }
-                    return m.etat === etat
-                  }).length;
-                  
-                  return (
-                    <button
-                      key={etat}
-                      onClick={() => setFiltre(etat)}
-                      className={`relative px-4 py-2 md:py-1.5 rounded-xl font-medium transition-all text-sm md:text-base ${
-                        filtre === etat 
-                          ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
-                          : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
-                      }`}
-                    >
-                      <span className="flex items-center justify-center gap-1.5">
-                        <span className="text-lg">{ETATS_CONFIG[etat].emoji}</span>
-                        <span className="hidden sm:inline">{ETATS_CONFIG[etat].label}</span>
-                        <span className="sm:hidden">
-                          {etat === 'EN_COURS' ? 'En cours' : 
-                           etat === 'REUSSI' ? 'Gagnées' : 'Perdues'}
-                        </span>
-                        <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
-                          {count}
-                        </span>
-                      </span>
-                    </button>
-                  );
-                })}
+            {/* VERSION MOBILE - Menus déroulants */}
+            <div className="md:hidden space-y-3">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+                  <span className="text-2xl">🎯</span>
+                  <span>Montantes</span>
+                </h2>
+                <span className="text-sm text-gray-500">({montantes.length})</span>
               </div>
               
-              {/* Tri sur desktop */}
-              <div className="hidden md:block">
-                <select
-                  value={tri}
-                  onChange={(e) => setTri(e.target.value as TriMontante)}
-                  className="px-4 py-1.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
-                >
-                  <option value="recent">📅 Plus récentes</option>
-                  <option value="ancien">📅 Plus anciennes</option>
-                  <option value="progression">📊 Progression ↓</option>
-                  <option value="mise">💰 Mise ↓</option>
-                </select>
-              </div>
-            </div>
+              {/* Select pour les filtres */}
+              <select
+                value={filtre}
+                onChange={(e) => setFiltre(e.target.value as FiltreMontante)}
+                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
+              >
+                <option value="toutes">📋 Toutes les montantes ({compteMontantes.toutes})</option>
+                <option value="EN_COURS">{ETATS_CONFIG.EN_COURS.emoji} En cours ({compteMontantes.EN_COURS})</option>
+                <option value="REUSSI">{ETATS_CONFIG.REUSSI.emoji} Gagnées ({compteMontantes.REUSSI})</option>
+                <option value="PERDU">{ETATS_CONFIG.PERDU.emoji} Perdues ({compteMontantes.PERDU})</option>
+              </select>
 
-            {/* Tri sur mobile */}
-            <div className="mb-4 md:hidden">
+              {/* Select pour le tri */}
               <select
                 value={tri}
                 onChange={(e) => setTri(e.target.value as TriMontante)}
@@ -169,6 +122,85 @@ export default function HomePage() {
                 <option value="progression">📊 Progression ↓</option>
                 <option value="mise">💰 Mise ↓</option>
               </select>
+            </div>
+
+            {/* VERSION DESKTOP - Conservée telle quelle */}
+            <div className="hidden md:block">
+              {/* Header de la section filtres */}
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 md:mb-0 md:gap-6">
+                {/* Titre */}
+                <h2 className="text-lg md:text-xl font-bold text-gray-800 flex items-center gap-2 mb-4 md:mb-0">
+                  <span className="text-2xl">🎯</span>
+                  <span>Montantes</span>
+                  <span className="text-sm font-normal text-gray-500 ml-2">({montantes.length} au total)</span>
+                </h2>
+                
+                {/* Filtres - centrés sur desktop */}
+                <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:flex-1">
+                  <button
+                    onClick={() => setFiltre('toutes')}
+                    className={`relative px-4 py-2 md:py-1.5 rounded-xl font-medium transition-all text-sm md:text-base ${
+                      filtre === 'toutes' 
+                        ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
+                        : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
+                    }`}
+                  >
+                    <span className="flex items-center justify-center gap-1.5">
+                      <span>Toutes</span>
+                      <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
+                        {montantes.length}
+                      </span>
+                    </span>
+                  </button>
+                  
+                  {(['EN_COURS', 'REUSSI', 'PERDU'] as const).map(etat => {
+                    const count = montantes.filter(m => {
+                      if (etat === 'REUSSI') {
+                        return m.etat === 'REUSSI' || m.etat === 'ARRETEE'
+                      }
+                      return m.etat === etat
+                    }).length;
+                    
+                    return (
+                      <button
+                        key={etat}
+                        onClick={() => setFiltre(etat)}
+                        className={`relative px-4 py-2 md:py-1.5 rounded-xl font-medium transition-all text-sm md:text-base ${
+                          filtre === etat 
+                            ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg transform scale-105' 
+                            : 'bg-white border border-gray-200 text-gray-700 hover:border-blue-300 hover:shadow-md'
+                        }`}
+                      >
+                        <span className="flex items-center justify-center gap-1.5">
+                          <span className="text-lg">{ETATS_CONFIG[etat].emoji}</span>
+                          <span className="hidden sm:inline">{ETATS_CONFIG[etat].label}</span>
+                          <span className="sm:hidden">
+                            {etat === 'EN_COURS' ? 'En cours' : 
+                             etat === 'REUSSI' ? 'Gagnées' : 'Perdues'}
+                          </span>
+                          <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded-full">
+                            {count}
+                          </span>
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+                
+                {/* Tri sur desktop */}
+                <div className="hidden md:block">
+                  <select
+                    value={tri}
+                    onChange={(e) => setTri(e.target.value as TriMontante)}
+                    className="px-4 py-1.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
+                  >
+                    <option value="recent">📅 Plus récentes</option>
+                    <option value="ancien">📅 Plus anciennes</option>
+                    <option value="progression">📊 Progression ↓</option>
+                    <option value="mise">💰 Mise ↓</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
