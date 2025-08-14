@@ -133,8 +133,8 @@ export default function StatistiquesPage() {
         </div>
       </section>
 
-      {/* Stats principales */}
-      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stats principales - VERSION MOBILE (inchangée) */}
+      <section className="grid grid-cols-1 md:hidden gap-6">
         <StatsCard
           title="Taux de réussite"
           value={formatPourcentage(stats.tauxReussite || 0)}
@@ -166,6 +166,41 @@ export default function StatistiquesPage() {
           subtitle={`Capital engagé: ${formatEuro(stats.misesEngagees || 0)}`}
           icon="⏳"
           color="primary"
+        />
+      </section>
+
+      {/* Stats principales - VERSION DESKTOP (modifiée et centrée) */}
+      <section className="hidden md:grid md:grid-cols-4 gap-6">
+        <StatsCard
+          title="Bilan total Montantes"
+          value={formatEuro(stats.bilanTotal || 0)}
+          icon="💰"
+          color={(stats.bilanTotal || 0) > 0 ? 'success' : 'danger'}
+          centered={true}
+        />
+        
+        <StatsCard
+          title="Bilan Montantes"
+          value={`${montantesReussiesTotal}/${stats.nombreTotal || 0} réussies`}
+          icon="📊"
+          color="primary"
+          centered={true}
+        />
+        
+        <StatsCard
+          title="Taux de Réussite"
+          value={formatPourcentage(stats.tauxReussite || 0)}
+          icon="🎯"
+          color={stats.tauxReussite >= 70 ? 'success' : stats.tauxReussite >= 50 ? 'warning' : 'danger'}
+          centered={true}
+        />
+        
+        <StatsCard
+          title="ROI Global"
+          value={formatPourcentage(stats.roi || 0)}
+          icon="💎"
+          color={(stats.roi || 0) > 0 ? 'success' : 'danger'}
+          centered={true}
         />
       </section>
 
