@@ -11,6 +11,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
   const [filtre, setFiltre] = useState<FiltreMontante>('toutes')
   const [tri, setTri] = useState<TriMontante>('recent')
+  const [menuOuvert, setMenuOuvert] = useState(false)
 
   useEffect(() => {
     chargerDonnees()
@@ -90,39 +91,59 @@ export default function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 via-transparent to-purple-50/50 pointer-events-none" />
           
           <div className="relative">
-            {/* VERSION MOBILE - Menus déroulants */}
-            <div className="md:hidden space-y-3">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+            {/* VERSION MOBILE - Menu déroulant */}
+            <div className="md:hidden">
+              {/* En-tête cliquable */}
+              <button
+                onClick={() => setMenuOuvert(!menuOuvert)}
+                className="w-full flex items-center justify-between py-2 text-left"
+              >
+                <div className="flex items-center gap-2">
                   <span className="text-2xl">🎯</span>
-                  <span>Montantes</span>
-                </h2>
-                <span className="text-sm text-gray-500">({montantes.length})</span>
-              </div>
+                  <span className="text-lg font-bold text-gray-800">Montantes</span>
+                  <span className="text-sm text-gray-500">({montantes.length})</span>
+                </div>
+                <div className="flex items-center gap-1 text-sm text-gray-600">
+                  <span>Filtrer</span>
+                  <svg 
+                    className={`w-4 h-4 transition-transform duration-200 ${menuOuvert ? 'rotate-180' : ''}`}
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </button>
               
-              {/* Select pour les filtres */}
-              <select
-                value={filtre}
-                onChange={(e) => setFiltre(e.target.value as FiltreMontante)}
-                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
-              >
-                <option value="toutes">📋 Toutes les montantes ({compteMontantes.toutes})</option>
-                <option value="EN_COURS">{ETATS_CONFIG.EN_COURS.emoji} En cours ({compteMontantes.EN_COURS})</option>
-                <option value="REUSSI">{ETATS_CONFIG.REUSSI.emoji} Gagnées ({compteMontantes.REUSSI})</option>
-                <option value="PERDU">{ETATS_CONFIG.PERDU.emoji} Perdues ({compteMontantes.PERDU})</option>
-              </select>
+              {/* Menu déroulant */}
+              <div className={`overflow-hidden transition-all duration-300 ${menuOuvert ? 'max-h-48' : 'max-h-0'}`}>
+                <div className="pt-3 space-y-3">
+                  {/* Select pour les filtres */}
+                  <select
+                    value={filtre}
+                    onChange={(e) => setFiltre(e.target.value as FiltreMontante)}
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
+                  >
+                    <option value="toutes">📋 Toutes les montantes ({compteMontantes.toutes})</option>
+                    <option value="EN_COURS">{ETATS_CONFIG.EN_COURS.emoji} En cours ({compteMontantes.EN_COURS})</option>
+                    <option value="REUSSI">{ETATS_CONFIG.REUSSI.emoji} Gagnées ({compteMontantes.REUSSI})</option>
+                    <option value="PERDU">{ETATS_CONFIG.PERDU.emoji} Perdues ({compteMontantes.PERDU})</option>
+                  </select>
 
-              {/* Select pour le tri */}
-              <select
-                value={tri}
-                onChange={(e) => setTri(e.target.value as TriMontante)}
-                className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
-              >
-                <option value="recent">📅 Plus récentes</option>
-                <option value="ancien">📅 Plus anciennes</option>
-                <option value="progression">📊 Progression ↓</option>
-                <option value="mise">💰 Mise ↓</option>
-              </select>
+                  {/* Select pour le tri */}
+                  <select
+                    value={tri}
+                    onChange={(e) => setTri(e.target.value as TriMontante)}
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm font-medium"
+                  >
+                    <option value="recent">📅 Plus récentes</option>
+                    <option value="ancien">📅 Plus anciennes</option>
+                    <option value="progression">📊 Progression ↓</option>
+                    <option value="mise">💰 Mise ↓</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
             {/* VERSION DESKTOP - Conservée telle quelle */}
