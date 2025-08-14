@@ -169,23 +169,23 @@ export default function MontanteDetailPage() {
 
             {/* Cartes de stats */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-              <div className="bg-gray-50 rounded-lg p-4">
+              <div className="bg-gray-50 rounded-lg p-4 text-center">
                 <p className="text-sm text-gray-600">Mise initiale</p>
                 <p className="text-xl font-bold text-gray-900">{formatEuro(montante.miseInitiale)}</p>
               </div>
-              <div className="bg-green-50 rounded-lg p-4">
+              <div className="bg-green-50 rounded-lg p-4 text-center">
                 <p className="text-sm text-gray-600">
                   {isTerminee ? 'Gain final' : 'Gain actuel'}
                 </p>
                 <p className="text-xl font-bold text-green-600">{formatEuro(gainActuelReel)}</p>
               </div>
-              <div className={`rounded-lg p-4 ${progressionReelle > 0 ? 'bg-green-50' : 'bg-red-50'}`}>
+              <div className={`rounded-lg p-4 text-center ${progressionReelle > 0 ? 'bg-green-50' : 'bg-red-50'}`}>
                 <p className="text-sm text-gray-600">Progression</p>
                 <p className={`text-xl font-bold ${progressionReelle > 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {formatPourcentage(progressionReelle)}
                 </p>
               </div>
-              <div className="bg-blue-50 rounded-lg p-4">
+              <div className="bg-blue-50 rounded-lg p-4 text-center">
                 <p className="text-sm text-gray-600">État</p>
                 <p className="text-xl font-bold" style={{ color: etatConfig.couleur }}>
                   {etatConfig.label}
