@@ -114,7 +114,31 @@ export default function MontanteDetailPage() {
         statutPalier = `Palier ${dernierPalier.numeroPalier + 1} en attente`
       }
     }
+  } else if (isTerminee && montante.dateFin) {
+    // Montante terminée avec date de fin
+    const dateFin = new Date(montante.dateFin).toLocaleDateString('fr-FR')
+    
+    if (montante.etat === 'REUSSI') {
+      statutPalier = `Finie le ${dateFin} - Objectif atteint`
+    } else if (montante.etat === 'ARRETEE') {
+      statutPalier = `Finie le ${dateFin} - Gains sécurisés à ${progressionObjectif.toFixed(1).replace('.', ',')}% de l'objectif`
+    } else if (montante.etat === 'PERDU') {
+      // Trouver le palier perdu
+      const palierPerdu = paliers.find(p => p.statut === 'PERDU')
+      if (palierPerdu) {
+        statutPalier = `Finie le ${dateFin} - Perdue au palier ${palierPerdu.numeroPalier}`
+      } else {
+        // Si on ne trouve pas de palier perdu, on prend le dernier palier
+        const dernierPalier = paliers.length > 0 ? paliers[paliers.length - 1] : null
+        if (dernierPalier) {
+          statutPalier = `Finie le ${dateFin} - Perdue au palier ${dernierPalier.numeroPalier}`
+        } else {
+          statutPalier = `Finie le ${dateFin} - Perdue`
+        }
+      }
+    }
   } else if (isTerminee) {
+    // Montante terminée sans date de fin (fallback)
     statutPalier = 'Terminée'
   }
   
