@@ -91,7 +91,7 @@ export default function FonctionnementPage() {
             Comment fonctionnent les montantes ?
           </h1>
           <p className="text-gray-600">
-            Découvrez notre méthode de paris progressifs et nos règles strictes
+            Découvrez notre méthode de paris progressifs
           </p>
         </section>
 
