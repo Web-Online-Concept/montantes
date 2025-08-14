@@ -92,7 +92,7 @@ export default function Header() {
           {/* Bankroll + Telegram + Stake Desktop */}
           <div className="hidden md:flex md:items-center md:space-x-3">
             {bankroll !== null && (
-              <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg">
+              <div className="bg-white/10 backdrop-blur-sm px-4 py-2 rounded-lg text-center">
                 <p className="text-xs text-[#fbbf24]">Bankroll</p>
                 <p className="text-white font-bold">{formatEuro(bankroll)}</p>
               </div>
