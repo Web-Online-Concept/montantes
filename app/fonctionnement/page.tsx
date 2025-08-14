@@ -85,12 +85,12 @@ export default function FonctionnementPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="py-8 max-w-4xl mx-auto">
-        {/* Hero Section */}
+        {/* Hero Section - harmonisé avec les autres pages */}
         <section className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-black text-[#1e40af] mb-4">
+          <h1 className="text-4xl font-black text-[#1e40af] mb-2">
             Comment fonctionnent les montantes ?
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-gray-600">
             Découvrez notre méthode de paris progressifs et nos règles strictes
           </p>
         </section>
