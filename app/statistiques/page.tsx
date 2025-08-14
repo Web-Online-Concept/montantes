@@ -180,8 +180,8 @@ export default function StatistiquesPage() {
         />
         
         <StatsCard
-          title="Bilan Montantes"
-          value={`${montantesReussiesTotal}/${stats.nombreTotal || 0} réussies`}
+          title="Montantes Réussies"
+          value={`${montantesReussiesTotal}/${stats.nombreTotal || 0}`}
           icon="📊"
           color="primary"
           centered={true}
