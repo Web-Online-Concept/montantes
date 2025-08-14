@@ -110,45 +110,6 @@ export default function HistoriquePage() {
           </div>
         )}
 
-        {/* Filtres */}
-        <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-4 md:gap-8">
-            {/* Filtre par type */}
-            <div className="flex items-center justify-center space-x-2">
-              <label className="text-sm text-gray-600">Type :</label>
-              <select
-                value={typeFiltre}
-                onChange={(e) => setTypeFiltre(e.target.value as any)}
-                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fbbf24]"
-              >
-                <option value="tout">Tout</option>
-                <option value="depot_retrait">Dépôts/Retraits</option>
-                <option value="montantes">Montantes</option>
-              </select>
-            </div>
-
-            {/* Filtre par période */}
-            <div className="flex items-center justify-center space-x-2">
-              <label className="text-sm text-gray-600">Période :</label>
-              <div className="flex space-x-2">
-                {(['7j', '30j', '90j', 'tout'] as PeriodeFiltre[]).map(p => (
-                  <button
-                    key={p}
-                    onClick={() => setPeriode(p)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      periode === p
-                        ? 'bg-[#1e40af] text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {p === 'tout' ? 'Tout' : `${p.replace('j', ' jours')}`}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Statistiques détaillées - 2 par ligne sur mobile */}
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-8">
@@ -193,6 +154,45 @@ export default function HistoriquePage() {
             </div>
           </div>
         )}
+
+        {/* Filtres */}
+        <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-center gap-4 md:gap-8">
+            {/* Filtre par type */}
+            <div className="flex items-center justify-center space-x-2">
+              <label className="text-sm text-gray-600">Type :</label>
+              <select
+                value={typeFiltre}
+                onChange={(e) => setTypeFiltre(e.target.value as any)}
+                className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#fbbf24]"
+              >
+                <option value="tout">Tout</option>
+                <option value="depot_retrait">Dépôts/Retraits</option>
+                <option value="montantes">Montantes</option>
+              </select>
+            </div>
+
+            {/* Filtre par période */}
+            <div className="flex items-center justify-center space-x-2">
+              <label className="text-sm text-gray-600">Période :</label>
+              <div className="flex space-x-2">
+                {(['7j', '30j', '90j', 'tout'] as PeriodeFiltre[]).map(p => (
+                  <button
+                    key={p}
+                    onClick={() => setPeriode(p)}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      periode === p
+                        ? 'bg-[#1e40af] text-white'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {p === 'tout' ? 'Tout' : `${p.replace('j', ' jours')}`}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Timeline - avec bouton export dans le header */}
         <div className="bg-white rounded-xl shadow-md p-6">

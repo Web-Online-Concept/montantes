@@ -163,6 +163,14 @@ export default function StatistiquesPage() {
         />
         
         <StatsCard
+          title="ROI Global"
+          value={formatPourcentage(stats.roi || 0)}
+          icon="💎"
+          color={(stats.roi || 0) > 0 ? 'success' : 'danger'}
+          centered={true}
+        />
+        
+        <StatsCard
           title="Montantes Réussies"
           value={`${montantesReussiesTotal}/${montantesTerminees}`}
           icon="📊"
@@ -175,14 +183,6 @@ export default function StatistiquesPage() {
           value={formatPourcentage(stats.tauxReussite || 0)}
           icon="🎯"
           color={stats.tauxReussite >= 70 ? 'success' : stats.tauxReussite >= 50 ? 'warning' : 'danger'}
-          centered={true}
-        />
-        
-        <StatsCard
-          title="ROI Global"
-          value={formatPourcentage(stats.roi || 0)}
-          icon="💎"
-          color={(stats.roi || 0) > 0 ? 'success' : 'danger'}
           centered={true}
         />
       </section>
@@ -198,6 +198,14 @@ export default function StatistiquesPage() {
         />
         
         <StatsCard
+          title="ROI Global"
+          value={formatPourcentage(stats.roi || 0)}
+          icon="💎"
+          color={(stats.roi || 0) > 0 ? 'success' : 'danger'}
+          centered={true}
+        />
+        
+        <StatsCard
           title="Montantes Réussies"
           value={`${montantesReussiesTotal}/${montantesTerminees}`}
           icon="📊"
@@ -210,14 +218,6 @@ export default function StatistiquesPage() {
           value={formatPourcentage(stats.tauxReussite || 0)}
           icon="🎯"
           color={stats.tauxReussite >= 70 ? 'success' : stats.tauxReussite >= 50 ? 'warning' : 'danger'}
-          centered={true}
-        />
-        
-        <StatsCard
-          title="ROI Global"
-          value={formatPourcentage(stats.roi || 0)}
-          icon="💎"
-          color={(stats.roi || 0) > 0 ? 'success' : 'danger'}
           centered={true}
         />
       </section>
