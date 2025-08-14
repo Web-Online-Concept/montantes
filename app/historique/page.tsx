@@ -77,31 +77,31 @@ export default function HistoriquePage() {
   return (
     <div className="min-h-screen bg-slate-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
-        {/* En-tête */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Historique Bankroll</h1>
-          <p className="text-gray-600 mt-2">Suivez l&apos;évolution détaillée de votre capital</p>
+        {/* En-tête - harmonisé avec la page statistiques */}
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-black text-[#1e40af] mb-2">Historique Bankroll</h1>
+          <p className="text-gray-600">Suivez l&apos;évolution détaillée de votre capital</p>
         </div>
 
-        {/* Résumé */}
+        {/* Résumé - centré */}
         {stats && (
           <div className="bg-white rounded-xl shadow-md p-6 mb-8">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div>
+              <div className="text-center">
                 <p className="text-sm text-gray-600 mb-1">Bankroll initiale</p>
                 <p className="text-2xl font-bold text-gray-900">{formatEuro(stats.bankrollInitiale)}</p>
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-sm text-gray-600 mb-1">Bankroll actuelle</p>
                 <p className="text-2xl font-bold text-gray-900">{formatEuro(stats.bankrollActuelle)}</p>
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-sm text-gray-600 mb-1">Variation totale</p>
                 <p className={`text-2xl font-bold ${stats.variationTotale >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {stats.variationTotale >= 0 ? '+' : ''}{formatEuro(stats.variationTotale)}
                 </p>
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-sm text-gray-600 mb-1">Performance</p>
                 <p className={`text-2xl font-bold ${stats.variationTotale >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {calculerPerformance()}
@@ -150,46 +150,46 @@ export default function HistoriquePage() {
           </div>
         </div>
 
-        {/* Statistiques détaillées */}
+        {/* Statistiques détaillées - centrées avec emojis rapprochés */}
         {stats && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-green-700">Total dépôts</h3>
+            <div className="bg-white rounded-xl shadow-md p-6 text-center">
+              <h3 className="font-semibold text-green-700 mb-2 flex items-center justify-center gap-1">
+                Total dépôts
                 <svg className="w-6 h-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
-              </div>
+              </h3>
               <p className="text-2xl font-bold text-gray-900">{formatEuro(stats.totalDepots)}</p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-red-700">Total retraits</h3>
+            <div className="bg-white rounded-xl shadow-md p-6 text-center">
+              <h3 className="font-semibold text-red-700 mb-2 flex items-center justify-center gap-1">
+                Total retraits
                 <svg className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                 </svg>
-              </div>
+              </h3>
               <p className="text-2xl font-bold text-gray-900">{formatEuro(stats.totalRetraits)}</p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-blue-700">Gains montantes</h3>
+            <div className="bg-white rounded-xl shadow-md p-6 text-center">
+              <h3 className="font-semibold text-blue-700 mb-2 flex items-center justify-center gap-1">
+                Gains montantes
                 <svg className="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                 </svg>
-              </div>
+              </h3>
               <p className="text-2xl font-bold text-gray-900">{formatEuro(stats.totalGains)}</p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-md p-6">
-              <div className="flex items-center justify-between mb-2">
-                <h3 className="font-semibold text-orange-700">Pertes montantes</h3>
+            <div className="bg-white rounded-xl shadow-md p-6 text-center">
+              <h3 className="font-semibold text-orange-700 mb-2 flex items-center justify-center gap-1">
+                Pertes montantes
                 <svg className="w-6 h-6 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6" />
                 </svg>
-              </div>
+              </h3>
               <p className="text-2xl font-bold text-gray-900">{formatEuro(stats.totalPertes)}</p>
             </div>
           </div>
