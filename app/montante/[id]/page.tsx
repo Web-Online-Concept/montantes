@@ -122,24 +122,27 @@ export default function MontanteDetailPage() {
     }
   } else if (isTerminee && montante.dateFin) {
     // Montante terminée avec date de fin
-    const dateFin = new Date(montante.dateFin).toLocaleDateString('fr-FR')
-    
     if (montante.etat === 'REUSSI') {
-      statutPalier = `Finie le ${dateFin} - Objectif atteint`
+      // Vérifier si l'objectif a été atteint à 100% ou non
+      if (progressionObjectif >= 100) {
+        statutPalier = 'Objectif atteint'
+      } else {
+        statutPalier = `Gains sécurisés à ${progressionObjectif.toFixed(1).replace('.', ',')}% de l'objectif`
+      }
     } else if (montante.etat === 'ARRETEE') {
-      statutPalier = `Finie le ${dateFin} - Gains sécurisés à ${progressionObjectif.toFixed(1).replace('.', ',')}% de l'objectif`
+      statutPalier = `Gains sécurisés à ${progressionObjectif.toFixed(1).replace('.', ',')}% de l'objectif`
     } else if (montante.etat === 'PERDU') {
       // Trouver le palier perdu
       const palierPerdu = paliers.find(p => p.statut === 'PERDU')
       if (palierPerdu) {
-        statutPalier = `Finie le ${dateFin} - Perdue au palier ${palierPerdu.numeroPalier}`
+        statutPalier = `Perdue au palier ${palierPerdu.numeroPalier}`
       } else {
         // Si on ne trouve pas de palier perdu, on prend le dernier palier
         const dernierPalier = paliers.length > 0 ? paliers[paliers.length - 1] : null
         if (dernierPalier) {
-          statutPalier = `Finie le ${dateFin} - Perdue au palier ${dernierPalier.numeroPalier}`
+          statutPalier = `Perdue au palier ${dernierPalier.numeroPalier}`
         } else {
-          statutPalier = `Finie le ${dateFin} - Perdue`
+          statutPalier = 'Perdue'
         }
       }
     }
@@ -179,7 +182,9 @@ export default function MontanteDetailPage() {
                   Montante n°{montante.numeroAffichage}
                 </h1>
                 <p className="text-gray-600 mt-1">
-                  Créée le {new Date(montante.dateDebut).toLocaleDateString('fr-FR')}
+                  {isTerminee && montante.dateFin ? 
+                    `Finie le ${new Date(montante.dateFin).toLocaleDateString('fr-FR')}` : 
+                    `Créée le ${new Date(montante.dateDebut).toLocaleDateString('fr-FR')}`}
                   {statutPalier && ` - ${statutPalier}`}
                 </p>
               </div>
