@@ -187,10 +187,7 @@ export default function MontanteDetailPage() {
                     `Créée le ${new Date(montante.dateDebut).toLocaleDateString('fr-FR')}`}
                 </p>
                 {statutPalier && (
-                  <p className="text-gray-600 text-sm md:hidden">{statutPalier}</p>
-                )}
-                {statutPalier && (
-                  <span className="hidden md:inline text-gray-600"> - {statutPalier}</span>
+                  <p className="text-gray-600 text-sm">{statutPalier}</p>
                 )}
               </div>
               <div className="text-right">
