@@ -17,10 +17,6 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
-  icons: {
-    icon: '/logo.png',
-    apple: '/logo.png',
-  },
   manifest: '/manifest.json',
   openGraph: {
     title: 'Montantes.pro - Gestion de montantes sportives',
@@ -120,6 +116,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className="scroll-smooth">
       <head>
+        <link rel="icon" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
