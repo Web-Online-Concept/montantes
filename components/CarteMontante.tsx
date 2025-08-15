@@ -31,16 +31,30 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
   
   const objectifConfig = OBJECTIFS_CONFIG[montante.objectif as keyof typeof OBJECTIFS_CONFIG]
   
-  // Calculer le gain à afficher (actuel ou final selon l'état)
+  // Calculer le gain RÉEL (comme dans la page de détail)
   const isTerminee = montante.etat === 'REUSSI' || montante.etat === 'PERDU' || montante.etat === 'ARRETEE'
-  const gainAffiche = isTerminee && montante.gainFinal 
-    ? montante.gainFinal 
-    : montante.gainActuel || montante.miseInitiale
+  
+  let gainAffiche = 0
+  
+  if (isTerminee && montante.gainFinal) {
+    // Montante terminée, utiliser le gain final
+    gainAffiche = montante.gainFinal
+  } else if (montante.paliers && montante.paliers.length > 0) {
+    // Montante en cours, chercher le dernier palier gagné
+    const paliersGagnes = montante.paliers
+      .filter(p => p.statut === 'GAGNE' && p.gain)
+      .sort((a, b) => b.numeroPalier - a.numeroPalier)
+    
+    if (paliersGagnes.length > 0) {
+      gainAffiche = paliersGagnes[0].gain!
+    }
+  }
+  // Si aucun palier gagné, gainAffiche reste à 0
   
   // Calculer la progression réelle
   const progressionReelle = gainAffiche > 0 
     ? ((gainAffiche - montante.miseInitiale) / montante.miseInitiale) * 100
-    : -100
+    : 0
   
   // Déterminer le statut du palier actuel
   let statutPalier = ''
@@ -135,7 +149,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
               <p className="text-xs text-gray-500">
                 {isTerminee ? 'Gain final' : 'Gain actuel'}
               </p>
-              <p className={`font-semibold ${gainAffiche > montante.miseInitiale ? 'text-green-600' : gainAffiche < montante.miseInitiale ? 'text-red-600' : 'text-gray-600'}`}>
+              <p className={`font-semibold ${gainAffiche > montante.miseInitiale ? 'text-green-600' : gainAffiche === 0 ? 'text-gray-600' : 'text-red-600'}`}>
                 {formatEuro(gainAffiche)}
               </p>
             </div>
