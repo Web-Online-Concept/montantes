@@ -245,9 +245,9 @@ export default function HomePage() {
         )}
       </div>
 
-      {/* CTA Telegram */}
-      <div className="bg-gradient-to-r from-blue-900 to-purple-900 text-white pt-6 pb-0 md:py-12">
-        <div className="max-w-4xl mx-auto px-4 text-center pb-6 md:pb-0">
+      {/* CTA Telegram - Collé au footer sur mobile */}
+      <div className="bg-gradient-to-r from-blue-900 to-purple-900 text-white py-6 md:py-12 -mb-12 md:mb-0">
+        <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4">
             Suivez nos montantes en direct sur Telegram
           </h2>
