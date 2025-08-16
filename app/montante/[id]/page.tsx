@@ -96,8 +96,10 @@ export default function MontanteDetailPage() {
   
   // Calculer la progression vers l'objectif
   const objectifMontant = montante.miseInitiale * objectifConfig.multiplicateur
-  const progressionObjectif = gainActuelReel > 0
-    ? Math.min((gainActuelReel / objectifMontant) * 100, 100)
+  const profitActuel = gainActuelReel > 0 ? gainActuelReel - montante.miseInitiale : 0
+  const profitObjectif = objectifMontant - montante.miseInitiale
+  const progressionObjectif = profitObjectif > 0 
+    ? Math.min((profitActuel / profitObjectif) * 100, 100)
     : 0
     
   // Déterminer le statut du palier actuel
@@ -230,7 +232,7 @@ export default function MontanteDetailPage() {
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">Progression vers l&apos;objectif</span>
                 <span className="text-sm font-medium">
-                  {formatEuro(gainActuelReel)} / {formatEuro(objectifMontant)}
+                  {formatEuro(montante.miseInitiale)} → {formatEuro(objectifMontant)}
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
@@ -247,7 +249,7 @@ export default function MontanteDetailPage() {
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-1 text-right">
-                {progressionObjectif.toFixed(1)}% de l&apos;objectif
+                {progressionObjectif.toFixed(1)}% de l&apos;objectif (profit: {formatEuro(profitActuel)} / {formatEuro(profitObjectif)})
               </p>
             </div>
           </div>

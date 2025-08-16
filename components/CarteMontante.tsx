@@ -51,7 +51,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
   }
   // Si aucun palier gagné, gainAffiche reste à 0
   
-  // Calculer la progression réelle
+  // Calculer la progression réelle (ROI)
   const progressionReelle = gainAffiche > 0 
     ? ((gainAffiche - montante.miseInitiale) / montante.miseInitiale) * 100
     : 0
@@ -78,10 +78,12 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
     statutPalier = 'Terminée'
   }
   
-  // Calculer le pourcentage de progression vers l'objectif
+  // Calculer le pourcentage de progression vers l'objectif (basé sur le profit)
   const objectifMontant = montante.miseInitiale * objectifConfig.multiplicateur
-  const progressionObjectif = gainAffiche > 0
-    ? Math.min((gainAffiche / objectifMontant) * 100, 100)
+  const profitActuel = gainAffiche > 0 ? gainAffiche - montante.miseInitiale : 0
+  const profitObjectif = objectifMontant - montante.miseInitiale
+  const progressionObjectif = profitObjectif > 0 
+    ? Math.min((profitActuel / profitObjectif) * 100, 100)
     : 0
   
   return (
@@ -134,7 +136,7 @@ export default function CarteMontante({ montante }: CarteMontanteProps) {
               </div>
             </div>
             <div className="flex justify-between items-center mt-1">
-              <span className="text-xs text-gray-500">{formatEuro(gainAffiche)}</span>
+              <span className="text-xs text-gray-500">{formatEuro(montante.miseInitiale)}</span>
               <span className="text-xs text-gray-500">{formatEuro(objectifMontant)}</span>
             </div>
           </div>
