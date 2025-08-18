@@ -60,7 +60,7 @@ export default function MontanteDetailPage() {
       etatConfig = {
         label: montante.etat as any,
         couleur: '#6b7280',
-        emoji: '⏳' as const
+        emoji: '⏹️' as const
       }
     }
   }
