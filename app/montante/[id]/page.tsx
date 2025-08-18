@@ -60,7 +60,7 @@ export default function MontanteDetailPage() {
       etatConfig = {
         label: montante.etat as any,
         couleur: '#6b7280',
-        emoji: '⏹️' as const
+        emoji: 'ℹ️' as const
       }
     }
   }
@@ -326,7 +326,7 @@ export default function MontanteDetailPage() {
             </p>
           ) : (
             <div className="space-y-4">
-              {paliers.map((palier) => (
+              {[...paliers].sort((a, b) => b.numeroPalier - a.numeroPalier).map((palier) => (
                 <CartePalier 
                   key={palier.id} 
                   palier={palier}
